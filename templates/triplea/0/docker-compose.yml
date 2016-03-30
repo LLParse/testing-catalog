@@ -2,9 +2,11 @@ triplea:
   image: llparse/triplea:v1
   environment:
   - NAME=${NAME}
-  - SUPPORT_EMAIL=${SUPPORT_EMAIL}
+  - EMAIL=${EMAIL}
+  - PORT=${PORT}
+  - MAX_HEAP=256m
   ports:
-  - "3304:3304"
+  - "${PORT}:${PORT}"
   labels:
-    io.rancher.scheduler.affinity:container_label_soft_ne: triplea=server
+    io.rancher.scheduler.affinity:container_label_ne: triplea=server
     triplea: server

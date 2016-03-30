@@ -1,6 +1,6 @@
 name: TripleA
 description: |
-  A free online turn based strategy and board game dedicated server
+  A free online turn based strategy board game (dedicated server)
 version: 1.8.0.9-rancher1
 category: Entertainment
 maintainer: James Oliver <joliver@rancher.com>

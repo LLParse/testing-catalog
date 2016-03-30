@@ -1,6 +1,6 @@
 .catalog:
   name: TripleA
-  description: A free online turn based strategy and board game dedicated server
+  description: A free online turn based strategy board game (dedicated server)
   version: 1.8.0.9-rancher1
   questions:
   - variable: NAME
@@ -9,16 +9,22 @@
     required: true
     type: string
     default: rancherlabs
-  - variable: SUPPORT_EMAIL
-    label: Support Email
-    description: Email address to be advertised
+  - variable: PORT
+    label: Server port
+    description: Public port of the server
     required: true
-    type: string
+    type: int
+    default: 3300
   - variable: SERVER_COUNT
     label: Number of Servers
-    description: Number of servers to run
+    description: Number of servers to run (we are constrained to one server per host)
     required: true
     type: int
     default: 1
+  - variable: EMAIL
+    label: Support Email
+    description: Email address to be advertised for server support
+    required: true
+    type: string
 triplea:
   scale: ${SERVER_COUNT}
