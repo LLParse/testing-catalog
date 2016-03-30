@@ -3,22 +3,26 @@
   description: A free online turn based strategy and board game dedicated server
   version: 1.8.0.9-rancher1
   questions:
-  - variable: INDEX
-    description: Index of the server (fixme use metadata)
-    required: true
-    type: int
-    default: 1
   - variable: NAME
+    label: Server name
     description: Name of the server
     required: true
     type: string
     default: rancherlabs
+  - variable: SERVER_COUNT
+    label: Number of Servers
+    description: Number of servers to run
+    required: true
+    type: int
+    default: 1
   - variable: SUPPORT_EMAIL
+    label: Support Email
     description: Email address to be advertised
     required: true
     type: string
-  - variable: SERVER_COUNT
-    description: Number of servers to run
+  - variable: INDEX
+    label: FIXME Server index
+    description: Index of the server (fixme use metadata)
     required: true
     type: int
     default: 1

@@ -4,3 +4,5 @@ triplea:
   - INDEX=${INDEX}
   - NAME=${NAME}
   - SUPPORT_EMAIL=${SUPPORT_EMAIL}
+  publish:
+  - "3304:3304"

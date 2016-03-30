@@ -10,7 +10,10 @@ RUN \
   rm -f /triplea.zip && \
   mv /triplea_1_8_0_9 /triplea
 
-RUN rm -rf /var/cache/apk/*
+RUN \
+  apk del curl unzip && \
+  rm -rf /var/cache/apk/*
 
+EXPOSE 3304
 ADD run.sh /run.sh
 ENTRYPOINT ["/run.sh"]
