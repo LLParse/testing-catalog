@@ -8,5 +8,5 @@ triplea:
   ports:
   - "${PORT}:${PORT}"
   labels:
-    io.rancher.scheduler.affinity:container_label_ne: triplea=server
-    triplea: server
+    io.rancher.scheduler.affinity:container_label_ne: triplea=${NAME}
+    triplea: ${NAME}
