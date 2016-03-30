@@ -11,7 +11,7 @@ RUN \
   mv /triplea_1_8_0_9 /triplea
 
 RUN \
-  apk del curl unzip && \
+  apk del unzip && \
   rm -rf /var/cache/apk/*
 
 EXPOSE 3304
