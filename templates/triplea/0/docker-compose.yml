@@ -4,5 +4,5 @@ triplea:
   - INDEX=${INDEX}
   - NAME=${NAME}
   - SUPPORT_EMAIL=${SUPPORT_EMAIL}
-  publish:
+  ports:
   - "3304:3304"
