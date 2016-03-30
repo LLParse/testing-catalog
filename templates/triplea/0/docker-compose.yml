@@ -5,3 +5,6 @@ triplea:
   - SUPPORT_EMAIL=${SUPPORT_EMAIL}
   ports:
   - "3304:3304"
+  labels:
+    io.rancher.scheduler.affinity:container_label_soft_ne: triplea=server
+    triplea: server
