@@ -1,7 +1,6 @@
 triplea:
   image: llparse/triplea:v1
   environment:
-  - INDEX=${INDEX}
   - NAME=${NAME}
   - SUPPORT_EMAIL=${SUPPORT_EMAIL}
   ports:

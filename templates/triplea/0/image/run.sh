@@ -1,11 +1,13 @@
 #!/bin/sh
 
+
 # may need adjustment
 MAX_HEAP=256
 PORT=3304
 
-# we shouldn't have to to change this very often
-LOBBY_HOST=173.255.229.134
+# we shouldn't have to to change this
+INDEX=$(curl rancher-metadata/2015-12-19/self/container/service_index)
+LOBBY_HOST=tripleawarclub.org
 LOBBY_PORT=3303
 
 java \
@@ -14,7 +16,7 @@ java \
   -Djava.awt.headless=true \
   -classpath /triplea/bin/triplea.jar \
   games.strategy.engine.framework.headlessGameServer.HeadlessGameServer \
-    triplea.game.host.console=true \
+    triplea.game.host.console=false \
     triplea.game.host.ui=false \
     triplea.game= \
     triplea.server=true \

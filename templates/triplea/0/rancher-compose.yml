@@ -9,20 +9,14 @@
     required: true
     type: string
     default: rancherlabs
-  - variable: SERVER_COUNT
-    label: Number of Servers
-    description: Number of servers to run
-    required: true
-    type: int
-    default: 1
   - variable: SUPPORT_EMAIL
     label: Support Email
     description: Email address to be advertised
     required: true
     type: string
-  - variable: INDEX
-    label: FIXME Server index
-    description: Index of the server (fixme use metadata)
+  - variable: SERVER_COUNT
+    label: Number of Servers
+    description: Number of servers to run
     required: true
     type: int
     default: 1
