@@ -1,0 +1,5 @@
+name: Hazelcast
+description: |
+  An open source in-memory data grid
+version: v3.6.2-rancher1
+category: Databases

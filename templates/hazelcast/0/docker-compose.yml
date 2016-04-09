@@ -1,0 +1,4 @@
+hazelcast:
+  image: llparse/hazelcast:v1
+  environment:
+    JAVA_OPTS: ${JAVA_OPTS}

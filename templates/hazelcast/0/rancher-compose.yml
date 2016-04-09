@@ -1,0 +1,21 @@
+.catalog:
+  name: Hazelcast
+  description: |
+    An open source in-memory data grid
+  version: v3.6.2-rancher1
+  minimum_rancher_version: v1.0.0
+  questions:
+  - variable: JAVA_OPTS
+    label: Java Options
+    description: Options to be passed to the Java Virtual Machine (JVM)
+    required: false
+    default: -Xms256m -Xmx256m
+    type: string
+  - variable: REPLICAS
+    label: Node Count
+    description: Initial number of nodes
+    required: true
+    default: 1
+    type: int
+hazelcast:
+  scale: ${REPLICAS}
