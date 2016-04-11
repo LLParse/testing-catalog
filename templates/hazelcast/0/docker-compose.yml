@@ -1,4 +1,9 @@
-hazelcast:
+management:
+  image: llparse/hazelcast:v1
+  command: --mancenter
+  ports:
+  - ${MANAGEMENT_PORT}:8080
+node:
   image: llparse/hazelcast:v1
   environment:
     JAVA_OPTS: ${JAVA_OPTS}

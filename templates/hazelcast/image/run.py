@@ -3,6 +3,11 @@
 from jinja2 import Template, Environment, FileSystemLoader
 from subprocess import call
 from urllib2 import urlopen, HTTPError, URLError
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description='Run hazelcast components')
+parser.add_argument('--mancenter', action='store_true')
+args = parser.parse_args()
 
 # interface we bind to
 def get_interface():
@@ -30,19 +35,22 @@ def get_members():
         print "WARNING: {0}! Using default members {1}".format(e.strerror, members)
     return members
 
-env = Environment(loader=FileSystemLoader('/'))
-template = env.get_template('config.xml.j2')
+if args.mancenter:
+    call(['java', '-jar', '/hazelcast/mancenter/mancenter-3.6.2.war', '8080', '/'])
+else:
+    env = Environment(loader=FileSystemLoader('/'))
+    template = env.get_template('config.xml.j2')
 
-with open('/config.xml', 'w') as f:
-    f.write(template.render(
-        name='dev',
-        password='dev-pass',
-        interface=get_interface(),
-        members=get_members(),
-        # Number of backups. If 1 is set as the backup-count for example,
-        # then all entries of the map will be copied to another JVM for
-        # fail-safety. 0 means no backup.
-        backup_count=1
-    ))
+    with open('/config.xml', 'w') as f:
+        f.write(template.render(
+            name='dev',
+            password='dev-pass',
+            interface=get_interface(),
+            members=get_members(),
+            # Number of backups. If 1 is set as the backup-count for example,
+            # then all entries of the map will be copied to another JVM for
+            # fail-safety. 0 means no backup.
+            backup_count=1
+        ))
 
-call(['java', '-cp', "/hazelcast/lib/hazelcast-all-3.6.2.jar", '-server', '-Dhazelcast.config=/config.xml', 'com.hazelcast.core.server.StartServer'])
+    call(['java', '-cp', "/hazelcast/lib/hazelcast-all-3.6.2.jar", '-server', '-Dhazelcast.config=/config.xml', 'com.hazelcast.core.server.StartServer'])
