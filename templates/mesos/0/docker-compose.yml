@@ -4,6 +4,7 @@ master:
     MESOS_QUORUM: ${MESOS_QUORUM}
     ZK_SERVICE: ${ZK_SERVICE}
     ZK_CHROOT: ${ZK_CHROOT}
+    ZK_SESSION_TIMEOUT: ${ZK_SESSION_TIMEOUT}
   ports:
   - "5050:5050"
   labels:
