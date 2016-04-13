@@ -1,6 +1,5 @@
 master:
   image: llparse/mesos-master:${VERSION}
-  command: /usr/sbin/mesos-master --zk_session_timeout=${MESOS_ZK_SESSION_TIMEOUT}
   environment:
     MESOS_QUORUM: ${MESOS_QUORUM}
     ZK_SERVICE: ${ZK_SERVICE}
@@ -12,12 +11,11 @@ master:
     mesos: master
 slave:
   image: llparse/mesos-slave:${VERSION}
-  command: /usr/sbin/mesos-slave
   environment:
     ZK_SERVICE: ${ZK_SERVICE}
     ZK_CHROOT: ${ZK_CHROOT}
   labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+    io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     mesos: slave
 #  net: host
   volumes:
