@@ -26,6 +26,12 @@
     required: true
     type: string
     default: mesos
+  - variable: MESOS_ZK_SESSION_TIMEOUT
+    description: You may need to increase this in virtualized environments or else zk requests will fail.
+    label: Zookeeper Session Timeout
+    required: true
+    type: string
+    default: 10secs
   - variable: MESOS_QUORUM
     description: Mesos quorum
     label: Mesos Quorum
