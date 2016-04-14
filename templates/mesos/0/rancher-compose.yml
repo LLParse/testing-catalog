@@ -32,6 +32,12 @@
     required: true
     type: string
     default: 10secs
+  - variable: MESOS_CLUSTER
+    description: Mesos cluster name to appear in the Master UI.
+    label: Cluster Name
+    required: true
+    type: string
+    default: rancher
   - variable: MESOS_QUORUM
     description: Mesos quorum
     label: Mesos Quorum
@@ -44,6 +50,12 @@
     required: true
     type: int
     default: 1
+  - variable: MASTER_PORT
+    description: Port to expose Mesos masters on.
+    label: Master Port
+    required: true
+    type: int
+    default: 5050
   - variable: MESOS_SLAVES
     description: Number of Mesos Slaves to run.
     label: Mesos Slaves
