@@ -1,0 +1,8 @@
+registry:
+  image: registry:2.4.0
+  labels:
+    io.rancher.scheduler.global: "true"
+  environment:
+    REGISTRY_LOG_LEVEL: debug
+  ports:
+  - ${REGISTRY_PORT}:5000/tcp

@@ -1,0 +1,15 @@
+.catalog:
+  questions:
+  - variable: "REGISTRY_PORT"
+    label: "Registry Port"
+    description: "Port on which to run the registry service"
+    default: 5000
+    required: true
+    type: int
+registry:
+  health_check:
+    port: 5000
+    interval: 10000
+    unhealthy_threshold: 2
+    healthy_threshold: 3
+    response_timeout: 5000
