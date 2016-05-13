@@ -6,10 +6,14 @@ zookeeper:
     ZK_INIT_LIMIT: ${ZK_INIT_LIMIT}
     ZK_SYNC_LIMIT: ${ZK_SYNC_LIMIT}
     ZK_MAX_CLIENT_CXNS: ${ZK_MAX_CLIENT_CXNS}
+  labels:
+    io.rancher.sidekicks: data
   volumes_from:
-  - zookeeper-data
-zookeeper-data:
+  - data
+data:
   image: llparse/zookeeper:latest
+  labels:
+    io.rancher.container.start_once: 'true'
   net: none
   volumes:
   - /data
