@@ -13,6 +13,7 @@ zookeeper:
   - data
 data:
   image: llparse/zookeeper:latest
+  entrypoint: /bin/true
   labels:
     io.rancher.container.start_once: 'true'
   net: none
