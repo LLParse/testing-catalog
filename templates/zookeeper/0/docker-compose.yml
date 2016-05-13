@@ -6,6 +6,11 @@ zookeeper:
     ZK_INIT_LIMIT: ${ZK_INIT_LIMIT}
     ZK_SYNC_LIMIT: ${ZK_SYNC_LIMIT}
     ZK_MAX_CLIENT_CXNS: ${ZK_MAX_CLIENT_CXNS}
+  volumes-from:
+  - zookeeper-data
+zookeeper-data:
+  image: llparse/zookeeper:latest
+  net: none
   volumes:
   - /data
   - /log
