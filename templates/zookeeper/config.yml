@@ -1,0 +1,7 @@
+name: Zookeeper
+description: Zookeeper!!!! 
+version: 3.4.8-rancher1
+category: Clustering
+maintainer: "James Oliver <james@rancher.com>"
+minimum_rancher_version: v1.0.0
+license: 

@@ -1,0 +1,11 @@
+zookeeper:
+  image: llparse/zookeeper:latest
+  environment:
+    ZK_ENSEMBLE_SIZE: ${ZK_ENSEMBLE_SIZE}
+    ZK_TICK_TIME: ${ZK_TICK_TIME}
+    ZK_INIT_LIMIT: ${ZK_INIT_LIMIT}
+    ZK_SYNC_LIMIT: ${ZK_SYNC_LIMIT}
+    ZK_MAX_CLIENT_CXNS: ${ZK_MAX_CLIENT_CXNS}
+  volumes:
+  - /data
+  - /log
