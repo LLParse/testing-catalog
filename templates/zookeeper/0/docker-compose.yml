@@ -6,6 +6,7 @@ zookeeper:
     ZK_INIT_LIMIT: ${ZK_INIT_LIMIT}
     ZK_SYNC_LIMIT: ${ZK_SYNC_LIMIT}
     ZK_MAX_CLIENT_CXNS: ${ZK_MAX_CLIENT_CXNS}
+    JVMFLAGS: "-Xms${ZK_HEAP_SIZE}m -Xmx${ZK_HEAP_SIZE}m"
   labels:
     io.rancher.sidekicks: data
   volumes_from:

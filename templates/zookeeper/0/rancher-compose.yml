@@ -13,9 +13,9 @@
       min: 1
       max: 7
       type: int
-    - variable: ZK_MEMORY_HEAP
-      description: The amount of memory in megabytes allocated to the java heap
-      label: Heap Memory (MB)
+    - variable: ZK_HEAP_SIZE
+      description: The amount of memory in megabytes allocated to the jvm heap
+      label: Heap Memory Size (MB)
       required: true
       default: 512
       min: 64
