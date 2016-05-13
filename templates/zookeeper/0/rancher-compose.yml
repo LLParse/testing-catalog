@@ -47,6 +47,7 @@
       type: int
 zookeeper:
   scale: ${ZK_ENSEMBLE_SIZE}
+  retain_ip: true
   health_check:
     port: 2181
     request_line: ''
