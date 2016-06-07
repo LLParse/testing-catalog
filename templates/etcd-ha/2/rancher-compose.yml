@@ -14,11 +14,3 @@
 etcd:
   retain_ip: true
   scale: ${REPLICAS}
-  health_check:
-    port: 2379
-    interval: 7500
-    unhealthy_threshold: 2
-    # TODO: HTTP not TCP
-    #request_line: ''
-    healthy_threshold: 2
-    response_timeout: 5000
