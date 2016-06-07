@@ -1,14 +1,8 @@
 etcd:
-  image: rancher/etcd:v2.3.3
-  command: node ${REPLICAS}
+  image: rancher/etcd:v2.3.6
   labels:
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.sidekicks: data
-    # try not to schedule etcd nodes on the same host
-    io.rancher.scheduler.affinity:container_label_soft_ne: etcd=node
-    etcd: node
-  expose:
-    - "2379"
-    - "2380"
   environment:
     ETCDCTL_ENDPOINT: http://etcd:2379
   volumes_from:
