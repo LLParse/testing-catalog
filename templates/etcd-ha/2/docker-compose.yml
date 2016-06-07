@@ -1,8 +1,14 @@
 etcd:
-  image: rancher/etcd:v2.3.6
+  image: rancher/etcd:v2.3.3
+  command: node ${REPLICAS}
   labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.sidekicks: data
+    # try not to schedule etcd nodes on the same host
+    io.rancher.scheduler.affinity:container_label_soft_ne: etcd=node
+    etcd: node
+  expose:
+    - "2379"
+    - "2380"
   environment:
     ETCDCTL_ENDPOINT: http://etcd:2379
   volumes_from:
@@ -20,14 +26,14 @@ data:
 # Discovery containers are used for bootstrapping a cluster.
 # They will shutdown once this process is completed.
 etcd-discovery:
-  image: rancher/etcd:v2.3.6
+  image: rancher/etcd:v2.3.3
   command: discovery_node
   labels:
     io.rancher.container.start_once: 'true'
     io.rancher.sidekicks: bootstrap
 bootstrap:
-  image: rancher/etcd:v2.3.6
-  command: bootstrap
+  image: rancher/etcd:v2.3.3
+  command: bootstrap ${REPLICAS}
   links:
     - etcd-discovery
   labels:
