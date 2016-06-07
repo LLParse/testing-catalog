@@ -26,14 +26,14 @@ data:
 # Discovery containers are used for bootstrapping a cluster.
 # They will shutdown once this process is completed.
 etcd-discovery:
-  image: rancher/etcd:v2.3.3
+  image: rancher/etcd:v2.3.6
   command: discovery_node
   labels:
     io.rancher.container.start_once: 'true'
     io.rancher.sidekicks: bootstrap
 bootstrap:
-  image: rancher/etcd:v2.3.3
-  command: bootstrap ${REPLICAS}
+  image: rancher/etcd:v2.3.6
+  command: bootstrap
   links:
     - etcd-discovery
   labels:
