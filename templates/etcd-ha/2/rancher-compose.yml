@@ -16,8 +16,8 @@ etcd:
   scale: ${REPLICAS}
   health_check:
     port: 2379
-    request_line: '/health'
     interval: 7500
-    response_timeout: 5000
-    healthy_threshold: 2
     unhealthy_threshold: 2
+    request_line: '/health'
+    healthy_threshold: 2
+    response_timeout: 5000
