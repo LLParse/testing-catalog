@@ -5,6 +5,8 @@ etcd:
     io.rancher.sidekicks: data
   environment:
     ETCDCTL_ENDPOINT: http://etcd:2379
+  links:
+  - data
   volumes_from:
     - data
 # containerize data volume to enable restarts and upgrades
@@ -13,15 +15,16 @@ data:
   command: /bin/true
   net: none
   volumes:
-    - /data
+  - /data
   labels:
     io.rancher.container.start_once: 'true'
-
 # Discovery containers are used for bootstrapping a cluster.
-# They will shutdown once this process is completed.
-etcd-discovery:
+# They will shutdown once the bootstrap process is completed.
+discovery:
   image: rancher/etcd:v2.3.6
   command: discovery_node
+  links:
+  - etcd
   labels:
     io.rancher.container.start_once: 'true'
     io.rancher.sidekicks: bootstrap
@@ -29,7 +32,7 @@ bootstrap:
   image: rancher/etcd:v2.3.6
   command: bootstrap
   links:
-    - etcd-discovery
+  - discovery
   labels:
     io.rancher.container.start_once: 'true'
   environment:
