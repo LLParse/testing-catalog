@@ -2,7 +2,7 @@
 
 A distributed, highly-available key/value store written in Go.
 
-### Info:
+### Info
 
  This creates an N-node etcd cluster on top of Rancher. The bootstrap process is performed using a standalone etcd discovery node. Upon the cluster entering a running state, this discovery service will shutdown. The state of the etcd cluster is a key/value pair stored on etcd itself, in a hidden key at location `/_state`.
 
@@ -12,8 +12,8 @@ Scaling up an existing etcd cluster is fully automated using the [Etcd Members A
 
 Scaling down is unsupported..
 
- 
-### Usage:
+
+### Usage
 
 Select etcd the catalog page.
 
@@ -35,3 +35,7 @@ etcdctl member list
 
 It is always possible that DNS will return an IP address for an etcd node that is dying. Your application should ensure connection retry logic exists when it uses etcd, or alternatively provide 2+ endpoints using IP addresses to ensure high availability.
  
+### Changelog
+
+* Fixed upgrade strategy to automatically shutdown discovery containers
+* Refactor entrypoint script to use `giddyup` and `etcdctl`
