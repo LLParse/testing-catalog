@@ -1,0 +1,31 @@
+.catalog:
+  name: Autoscaling
+  version: 0.0.1
+  minimum_rancher_version: v1.1.0-dev4
+  questions:
+  - variable: SERVICE
+    description: Choose the service to autoscale
+    label: Scaled Service
+    required: true
+    type: service
+  - variable: CPU_THRESHOLD_PCT
+    description: Launch a new container when average CPU utilization meets or exceeds (>=) a certain percentage
+    label: CPU Threshold (%)
+    required: true
+    type: int
+    min: 1
+    max: 100
+    default: 80
+  - variable: CPU_THRESHOLD_PERIOD
+    description: The period of time in seconds that CPU utilization must meet or exceed (>=) the threshold
+    label: CPU Period (s)
+    required: true
+    type: int
+    min: 5
+    default: 60
+  - variable: CONTAINER_WARMUP
+    description: The period of time in seconds that new containers are given to warm up after each scale up
+    label: Container Warmup (s)
+    required: true
+    type: int
+    default: 60
