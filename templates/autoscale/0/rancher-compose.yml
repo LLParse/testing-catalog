@@ -13,19 +13,18 @@
     label: CPU Threshold (%)
     required: true
     type: int
-    min: 1
+    min: 0
     max: 100
     default: 80
-  - variable: CPU_THRESHOLD_PERIOD
-    description: The period of time in seconds that CPU utilization must meet or exceed (>=) the threshold
-    label: CPU Period (s)
+  - variable: THRESHOLD_PERIOD
+    description: Minimum period of time that a resource utilization threshold must continuously be met before scaling occurs
+    label: Period (time)
     required: true
-    type: int
-    min: 5
-    default: 60
+    type: string
+    default: 60s
   - variable: CONTAINER_WARMUP
-    description: The period of time in seconds that new containers are given to warm up after each scale up
-    label: Container Warmup (s)
+    description: The period of time that new containers are given to warm up before scaling resumes
+    label: Container Warmup (time)
     required: true
-    type: int
-    default: 60
+    type: string
+    default: 60s

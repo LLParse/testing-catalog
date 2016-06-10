@@ -1,9 +1,9 @@
 autoscale:
   image: rancher/autoscale:v0.0.1
-  environment:
-    SERVICE: ${SERVICE}
-    CPU_THRESHOLD_PCT: ${CPU_THRESHOLD_PCT}
-    CPU_THRESHOLD_PERIOD: ${CPU_THRESHOLD_PERIOD}
-    CONTAINER_WARMUP: ${CONTAINER_WARMUP}
+  command: |
+    service ${SERVICE}
+      --cpu ${CPU_THRESHOLD_PCT}
+      --period ${CPU_THRESHOLD_PERIOD}
+      --warmup ${CONTAINER_WARMUP}
   labels:
     io.rancher.container.start_once: 'true'
