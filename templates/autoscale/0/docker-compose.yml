@@ -3,7 +3,8 @@ autoscale:
   command: |
     service ${SERVICE}
       --cpu ${CPU_THRESHOLD_PCT}
-      --period ${CPU_THRESHOLD_PERIOD}
+      --mem ${MEM_THRESHOLD_PCT}
+      --period ${THRESHOLD_PERIOD}
       --warmup ${CONTAINER_WARMUP}
   labels:
     io.rancher.container.start_once: 'true'
