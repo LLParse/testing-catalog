@@ -8,3 +8,8 @@ autoscale:
       --warmup ${CONTAINER_WARMUP}
   labels:
     io.rancher.container.start_once: 'true'
+cadvisor:
+  image: rancher/haproxy-cadvisor:v0.0.1
+  labels:
+    io.rancher.scheduler.global: 'true'
+  net: host
