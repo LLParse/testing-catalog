@@ -8,6 +8,11 @@ autoscale:
       --warmup ${CONTAINER_WARMUP}
   labels:
     io.rancher.container.start_once: 'true'
+  links:
+  - cadvisor
+
+# proxy cadvisor traffic hack
+# connect on host ip, port 9244
 cadvisor:
   image: rancher/haproxy-cadvisor:v0.0.1
   labels:
