@@ -12,4 +12,4 @@ cadvisor:
   image: rancher/haproxy-cadvisor:v0.0.1
   labels:
     io.rancher.scheduler.global: 'true'
-   net: host
+  net: host
