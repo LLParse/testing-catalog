@@ -2,4 +2,4 @@ name: Kubernetes
 description: |
   Kubernetes service
 version: v0.1.0-rancher1
-category: System
+category: SystemVisible
