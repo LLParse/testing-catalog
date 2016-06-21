@@ -2,4 +2,4 @@ name: Kubernetes
 description: |
   Kubernetes service
 version: v1.2.4-rancher6
-category: System
+category: SystemUNHIDE
