@@ -11,6 +11,9 @@
       required: true
       default: 3
       type: int
+    - variable: DEBUG
+      type: boolean
+      default: false
 etcd:
   scale_policy:
     min: 1

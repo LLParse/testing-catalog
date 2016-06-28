@@ -6,6 +6,7 @@ etcd:
   environment:
     ETCD_DATA_DIR: /data
     ETCDCTL_ENDPOINT: http://etcd:2379
+    RANCHER_DEBUG: ${DEBUG}
   links:
   - data
   - discovery
@@ -28,6 +29,8 @@ discovery:
   labels:
     io.rancher.container.start_once: 'true'
     io.rancher.sidekicks: bootstrap
+  environment:
+    RANCHER_DEBUG: ${DEBUG}
 bootstrap:
   image: llparse/etcd:v2.3.6-2
   command: bootstrap
@@ -37,3 +40,4 @@ bootstrap:
     io.rancher.container.start_once: 'true'
   environment:
     ETCDCTL_ENDPOINT: http://etcd:2379
+    RANCHER_DEBUG: ${DEBUG}
