@@ -32,7 +32,7 @@ etcd:
   scale_policy:
     min: ${MIN_SCALE}
     max: ${MAX_SCALE}
-    increment: 2
+    increment: 1
   scale: ${REPLICAS}
   health_check:
     port: 2379
