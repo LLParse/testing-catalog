@@ -12,7 +12,8 @@
       default: 3
       type: int
     - variable: DEBUG
-      description: Debug
+      description: Enable or disable verbose logging and other debugging features
+      label: Debug
       type: boolean
       default: false
 etcd:
