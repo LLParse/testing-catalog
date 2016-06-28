@@ -22,23 +22,25 @@ data:
   - /data
   labels:
     io.rancher.container.start_once: 'true'
+
+# TODO (llparse) re-enable these containers when scale_policy min>1
 # Discovery containers are used for bootstrapping a cluster.
 # They will shutdown once the bootstrap process is completed.
-discovery:
-  image: llparse/etcd:v2.3.6-2
-  command: discovery_node
-  labels:
-    io.rancher.container.start_once: 'true'
-    io.rancher.sidekicks: bootstrap
-  environment:
-    RANCHER_DEBUG: ${DEBUG}
-bootstrap:
-  image: llparse/etcd:v2.3.6-2
-  command: bootstrap
-  links:
-  - discovery
-  labels:
-    io.rancher.container.start_once: 'true'
-  environment:
-    ETCDCTL_ENDPOINT: http://etcd:2379
-    RANCHER_DEBUG: ${DEBUG}
+#discovery:
+#  image: llparse/etcd:v2.3.6-2
+#  command: discovery_node
+#  labels:
+#    io.rancher.container.start_once: 'true'
+#    io.rancher.sidekicks: bootstrap
+#  environment:
+#    RANCHER_DEBUG: ${DEBUG}
+#bootstrap:
+#  image: llparse/etcd:v2.3.6-2
+#  command: bootstrap
+#  links:
+#  - discovery
+#  labels:
+#    io.rancher.container.start_once: 'true'
+#  environment:
+#    ETCDCTL_ENDPOINT: http://etcd:2379
+#    RANCHER_DEBUG: ${DEBUG}
