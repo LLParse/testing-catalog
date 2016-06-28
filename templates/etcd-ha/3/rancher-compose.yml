@@ -12,6 +12,7 @@
       default: 3
       type: int
     - variable: DEBUG
+      description: Debug
       type: boolean
       default: false
 etcd:
