@@ -14,7 +14,7 @@ etcd:
 # containerize data volume to enable restarts and upgrades
 data:
   image: llparse/etcd
-  command: /bin/true
+  entrypoint: /bin/true
   net: none
   volumes:
   - /data
