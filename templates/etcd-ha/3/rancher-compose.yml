@@ -27,6 +27,9 @@ etcd:
     min: ${MIN_SCALE}
     max: ${MAX_SCALE}
     increment: 1
+  metadata:
+    scale_policy:
+      min: ${MIN_SCALE}
   health_check:
     port: 2379
     request_line: '/health'
