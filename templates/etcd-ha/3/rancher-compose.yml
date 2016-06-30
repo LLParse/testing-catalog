@@ -6,13 +6,13 @@
   minimum_rancher_version: v1.1.0-rc2
   questions:
     - variable: MIN_SCALE
-      description: Minimum cluster size
+      description: Minimum cluster size, should be an odd number
       label: Min Scale
       type: int
       default: 3
       required: true
     - variable: MAX_SCALE
-      description: Maximum cluster size
+      description: Maximum cluster size, should be an odd number
       label: Max Scale
       type: int
       default: 5
@@ -26,7 +26,7 @@ etcd:
   scale_policy:
     min: ${MIN_SCALE}
     max: ${MAX_SCALE}
-    increment: 1
+    increment: 2
   health_check:
     port: 2379
     request_line: '/health'
