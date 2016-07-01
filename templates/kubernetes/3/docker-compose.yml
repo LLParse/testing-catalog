@@ -14,7 +14,7 @@ kubelet:
         - --healthz-bind-address=0.0.0.0
         - --cluster-dns=169.254.169.250
         - --cluster-domain=cluster.local
-    image: rancher/k8s:v1.2.4-rancher6
+    image: rancher/k8s:v1.2.4-rancher7
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /var/run:/host/var/run
@@ -37,14 +37,14 @@ proxy:
         - --v=2
         - --healthz-bind-address=0.0.0.0
         - --proxy-mode=userspace
-    image: rancher/k8s:v1.2.4-rancher6
+    image: rancher/k8s:v1.2.4-rancher7
     privileged: true
     net: host
     links:
         - kubernetes:master
 
 etcd:
-  image: llparse/etcd:v2.3.6-2
+  image: rancher/etcd:v2.3.6-2
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.container.start_once: 'true'
@@ -52,21 +52,26 @@ etcd:
   environment:
     ETCD_DATA_DIR: /data
     ETCDCTL_ENDPOINT: http://etcd:2379
-    RANCHER_DEBUG: true
+    RANCHER_DEBUG: ${DEBUG}
   links:
   - data
-  - discovery
   volumes_from:
     - data
 
 data:
-  image: llparse/etcd
+  image: busybox
   entrypoint: /bin/true
   net: none
   volumes:
   - /data
   labels:
     io.rancher.container.start_once: 'true'
+
+
+kubernetes-lb:
+    image: rancher/load-balancer-service
+    ports:
+    - 6444:6443
 
 kubernetes:
     labels:
@@ -84,7 +89,7 @@ kubernetes:
         - --client-ca-file=/etc/kubernetes/ssl/ca.pem
         - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
-    image: rancher/k8s:v1.2.4-rancher6
+    image: rancher/k8s:v1.2.4-rancher7
     links:
         - etcd
 
@@ -103,7 +108,7 @@ scheduler:
         - kube-scheduler
         - --master=http://master
         - --address=0.0.0.0
-    image: rancher/k8s:v1.2.4-rancher6
+    image: rancher/k8s:v1.2.4-rancher7
     links:
         - kubernetes:master
 
@@ -116,7 +121,7 @@ controller-manager:
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
-    image: rancher/k8s:v1.2.4-rancher6
+    image: rancher/k8s:v1.2.4-rancher7
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
