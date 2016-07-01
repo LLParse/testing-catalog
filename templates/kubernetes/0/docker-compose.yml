@@ -4,6 +4,7 @@ kubelet:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.scheduler.global: "true"
+        io.rancher.container.start_once: 'true'
     command:
         - kubelet
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
@@ -31,6 +32,7 @@ proxy:
     labels:
         io.rancher.container.dns: "true"
         io.rancher.scheduler.global: "true"
+        io.rancher.container.start_once: 'true'
     command:
         - kube-proxy
         - --master=http://kubernetes-lb
@@ -86,6 +88,7 @@ kubernetes:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.start_once: 'true'
     command: 
         - kube-apiserver
         - --service-cluster-ip-range=10.43.0.0/16
@@ -105,6 +108,7 @@ kubernetes:
 kubectld:
     labels:
         io.rancher.k8s.kubectld: "true"
+        io.rancher.container.start_once: 'true'
     environment:
         SERVER: http://kubernetes-lb
         LISTEN: ":8091"
@@ -120,6 +124,8 @@ scheduler:
     image: rancher/k8s:v1.2.4-rancher7
     links:
         - kubernetes:master
+    labels:
+        io.rancher.container.start_once: 'true'
 
 controller-manager:
     command:
@@ -134,6 +140,7 @@ controller-manager:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.start_once: 'true'
     links:
         - kubernetes-lb
 
@@ -141,6 +148,7 @@ rancher-kubernetes-agent:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent_service.labels_provider: "true"
+        io.rancher.container.start_once: 'true'
     environment:
         KUBERNETES_URL: http://kubernetes-lb
     image: rancher/kubernetes-agent:v0.2.0
@@ -155,6 +163,7 @@ rancher-ingress-controller:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environment
+        io.rancher.container.start_once: 'true'
     environment:
         KUBERNETES_URL: http://kubernetes-lb
     command:
