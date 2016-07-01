@@ -69,15 +69,10 @@ data:
   labels:
     io.rancher.container.start_once: 'true'
 
-#kubernetes-lb-insecure:
-#    image: rancher/load-balancer-service
-#    ports:
-#    - 80
-#    links:
-#    - kubernetes
-
 kubernetes-lb:
     image: rancher/load-balancer-service
+    labels:
+        io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     expose:
     - 6443/tcp
     - 80/tcp
