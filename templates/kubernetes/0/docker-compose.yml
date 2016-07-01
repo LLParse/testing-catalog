@@ -78,8 +78,6 @@ data:
 
 kubernetes-lb:
     image: rancher/load-balancer-service
-    haproxyConfig: |
-        timeout tunnel 3600000
     expose:
     - 6443/tcp
     - 80/tcp
