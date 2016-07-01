@@ -4,6 +4,14 @@
   description: Rancher Kubernetes service
   minimum_rancher_version: v1.1.0
 
+kubernetes-lb:
+    health_check:
+        port: 42
+        interval: 5000
+        response_timeout: 3000
+        healthy_threshold: 2
+        unhealthy_threshold: 3
+
 kubernetes:
     metadata:
         sans:
