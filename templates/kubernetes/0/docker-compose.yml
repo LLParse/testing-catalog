@@ -77,8 +77,8 @@ data:
 kubernetes-lb:
     image: rancher/load-balancer-service
     ports:
-    - 6443:6443
-    - 80:80
+    - 6443:6443/tcp
+    - 80:80/tcp
     links:
     - kubernetes
 
