@@ -7,7 +7,7 @@ kubelet:
     command:
         - kubelet
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
-        - --api_servers=https://kubernetes-lb:6443
+        - --api_servers=http://kubernetes-lb
         - --allow-privileged=true
         - --register-node=true
         - --cloud-provider=rancher
@@ -124,7 +124,7 @@ scheduler:
 controller-manager:
     command:
         - kube-controller-manager
-        - --master=https://kubernetes-lb:6443
+        - --master=http://kubernetes-lb
         - --cloud-provider=rancher
         - --address=0.0.0.0
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
