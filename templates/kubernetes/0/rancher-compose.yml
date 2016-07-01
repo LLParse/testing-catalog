@@ -4,7 +4,7 @@
   description: Rancher Kubernetes service
   minimum_rancher_version: v1.1.0
 
-apiserver-lb:
+kubernetes-lb:
     load_balancer_config:
         haproxy_config: {"defaults": "timeout tunnel 3600000"}
     scale_policy:
@@ -18,7 +18,7 @@ apiserver-lb:
         healthy_threshold: 2
         unhealthy_threshold: 3
 
-apiserver:
+kubernetes:
     metadata:
         sans:
         - "IP:10.43.0.1"

@@ -8,7 +8,7 @@ kubelet:
     command:
         - kubelet
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
-        - --api_servers=http://apiserver-lb
+        - --api_servers=http://kubernetes-lb
         - --allow-privileged=true
         - --register-node=true
         - --cloud-provider=rancher
@@ -26,7 +26,7 @@ kubelet:
     ipc: host
     privileged: true
     links:
-        - apiserver-lb
+        - kubernetes-lb
 
 proxy:
     labels:
@@ -35,7 +35,7 @@ proxy:
         io.rancher.container.start_once: 'true'
     command:
         - kube-proxy
-        - --master=http://apiserver-lb
+        - --master=http://kubernetes-lb
         - --v=2
         - --healthz-bind-address=0.0.0.0
         - --proxy-mode=userspace
@@ -43,7 +43,7 @@ proxy:
     privileged: true
     net: host
     links:
-        - apiserver-lb
+        - kubernetes-lb
 
 etcd:
   image: rancher/etcd:v2.3.6-2
@@ -69,7 +69,7 @@ data:
   labels:
     io.rancher.container.start_once: 'true'
 
-apiserver-lb:
+kubernetes-lb:
     image: rancher/load-balancer-service
     labels:
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
@@ -77,9 +77,9 @@ apiserver-lb:
     - 6443/tcp
     - 80/tcp
     links:
-    - apiserver
+    - kubernetes
 
-apiserver:
+kubernetes:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
@@ -105,27 +105,27 @@ kubectld:
         io.rancher.k8s.kubectld: "true"
         io.rancher.container.start_once: 'true'
     environment:
-        SERVER: http://apiserver-lb
+        SERVER: http://kubernetes-lb
         LISTEN: ":8091"
     image: rancher/kubectld:v0.2.0
     links:
-        - apiserver-lb
+        - kubernetes-lb
 
 scheduler:
     command:
         - kube-scheduler
-        - --master=http://apiserver-lb
+        - --master=http://kubernetes-lb
         - --address=0.0.0.0
     image: rancher/k8s:v1.2.4-rancher7
     links:
-        - apiserver-lb
+        - kubernetes-lb
     labels:
         io.rancher.container.start_once: 'true'
 
 controller-manager:
     command:
         - kube-controller-manager
-        - --master=http://apiserver-lb
+        - --master=http://kubernetes-lb
         - --cloud-provider=rancher
         - --address=0.0.0.0
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
@@ -137,20 +137,20 @@ controller-manager:
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.container.start_once: 'true'
     links:
-        - apiserver-lb
+        - kubernetes-lb
 
 rancher-kubernetes-agent:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent_service.labels_provider: "true"
     environment:
-        KUBERNETES_URL: http://apiserver-lb
+        KUBERNETES_URL: http://kubernetes-lb
     image: rancher/kubernetes-agent:v0.2.0
     privileged: true
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     links:
-        - apiserver-lb
+        - kubernetes-lb
 
 rancher-ingress-controller:
     image: rancher/ingress-controller:v0.1.3
@@ -159,10 +159,10 @@ rancher-ingress-controller:
         io.rancher.container.agent.role: environment
         io.rancher.container.start_once: 'true'
     environment:
-        KUBERNETES_URL: http://apiserver-lb
+        KUBERNETES_URL: http://kubernetes-lb
     command:
         - ingress-controller
         - --lb-controller=kubernetes
         - --lb-provider=rancher
     links:
-        - apiserver-lb
+        - kubernetes-lb
