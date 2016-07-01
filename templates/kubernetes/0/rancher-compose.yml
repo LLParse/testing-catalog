@@ -6,8 +6,7 @@
 
 kubernetes-lb:
     load_balancer_config:
-        defaults: |
-            timeout tunnel 3600000
+        haproxy_config: {"defaults": "timeout tunnel 3600000"}
     health_check:
         port: 42
         interval: 5000
