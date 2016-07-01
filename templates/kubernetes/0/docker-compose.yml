@@ -114,11 +114,11 @@ kubectld:
 scheduler:
     command:
         - kube-scheduler
-        - --master=http://kubernetes-lb-insecure:81
+        - --master=http://kubernetes-lb
         - --address=0.0.0.0
     image: rancher/k8s:v1.2.4-rancher7
     links:
-        - kubernetes:master
+        - kubernetes-lb
     labels:
         io.rancher.container.start_once: 'true'
 
