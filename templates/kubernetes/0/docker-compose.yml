@@ -103,6 +103,7 @@ kubelet:
         - --healthz-bind-address=0.0.0.0
         - --cluster-dns=169.254.169.250
         - --cluster-domain=cluster.local
+        - --port=10250
     image: llparse/k8s:dev
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
