@@ -12,28 +12,28 @@ etcd:
     metadata:
         scale_policy:
             min: 1
-#    health_check:
-#        request_line: GET /health HTTP/1.0
-#        port: 2379
-#        interval: 3000
-#        response_timeout: 2000
-#        unhealthy_threshold: 3
-#        healthy_threshold: 2
+    health_check:
+        request_line: GET /health HTTP/1.0
+        port: 2379
+        interval: 3000
+        response_timeout: 2000
+        unhealthy_threshold: 3
+        healthy_threshold: 2
 
-# Sidekick health checks don't work?
+# Sidekick health checks don't work
 
 kubernetes:
+    retain_ip: true
     metadata:
         sans:
         - "IP:10.43.0.1"
-    health_check:
-        request_line: GET /healthz HTTP/1.0
-        port: 80
-        interval: 5000
-        response_timeout: 3000
-        unhealthy_threshold: 3
-        healthy_threshold: 2
-    retain_ip: true
+#    health_check:
+#        request_line: GET /healthz HTTP/1.0
+#        port: 80
+#        interval: 5000
+#        response_timeout: 3000
+#        unhealthy_threshold: 3
+#        healthy_threshold: 2
 
 #scheduler:
 #    health_check:

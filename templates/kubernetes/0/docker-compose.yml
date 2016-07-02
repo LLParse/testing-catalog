@@ -3,23 +3,22 @@ etcd:
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.container.start_once: 'true'
+    io.rancher.sidekicks: data,kubernetes,scheduler,controller-manager
   environment:
     ETCD_DATA_DIR: /data
     ETCDCTL_ENDPOINT: http://etcd:2379
     RANCHER_DEBUG: ${DEBUG}
   links:
-  - data
-  - kubernetes
+    - data
   volumes_from:
-  - data
-  net: container:kubernetes
+    - data
 
 data:
   image: busybox
   entrypoint: /bin/true
   net: none
   volumes:
-  - /data
+    - /data
   labels:
     io.rancher.container.start_once: 'true'
 
@@ -29,7 +28,6 @@ kubernetes:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.container.start_once: 'true'
-        io.rancher.sidekicks: data,etcd,scheduler,controller-manager
     command: 
         - kube-apiserver
         - --service-cluster-ip-range=10.43.0.0/16
@@ -43,9 +41,10 @@ kubernetes:
         - --client-ca-file=/etc/kubernetes/ssl/ca.pem
         - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
-    image: rancher/k8s:v1.2.4-rancher7
-#    links:
-#    - etcd
+    image: llparse/k8s:dev
+    links:
+        - etcd
+    net: container:etcd
 
 scheduler:
     command:
@@ -54,12 +53,12 @@ scheduler:
         - --address=0.0.0.0
         - --port=10251
         - --leader-elect=true
-    image: rancher/k8s:v1.2.4-rancher7
+    image: llparse/k8s:dev
     links:
     - kubernetes
     labels:
         io.rancher.container.start_once: 'true'
-    net: container:kubernetes
+    net: container:etcd
 
 controller-manager:
     command:
@@ -72,14 +71,14 @@ controller-manager:
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
         - --leader-elect=true
-    image: rancher/k8s:v1.2.4-rancher7
+    image: llparse/k8s:dev
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.container.start_once: 'true'
     links:
     - kubernetes
-    net: container:kubernetes
+    net: container:etcd
 
 kubernetes-lb:
     image: rancher/load-balancer-service
@@ -108,7 +107,7 @@ kubelet:
         - --healthz-bind-address=0.0.0.0
         - --cluster-dns=169.254.169.250
         - --cluster-domain=cluster.local
-    image: rancher/k8s:v1.2.4-rancher7
+    image: llparse/k8s:dev
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
         - /var/run:/host/var/run
@@ -132,7 +131,7 @@ proxy:
         - --v=2
         - --healthz-bind-address=0.0.0.0
         - --proxy-mode=userspace
-    image: rancher/k8s:v1.2.4-rancher7
+    image: llparse/k8s:dev
     privileged: true
     net: host
     links:
