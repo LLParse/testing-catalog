@@ -11,7 +11,7 @@ etcd:
   links:
   - data
   volumes_from:
-    - data
+  - data
 
 data:
   image: busybox
@@ -47,19 +47,19 @@ kubernetes:
 scheduler:
     command:
         - kube-scheduler
-        - --master=http://kubernetes
+        - --master=http://127.0.0.1
         - --address=0.0.0.0
         - --leader-elect=true
     image: rancher/k8s:v1.2.4-rancher7
     links:
-        - kubernetes
+    - kubernetes
     labels:
         io.rancher.container.start_once: 'true'
 
 controller-manager:
     command:
         - kube-controller-manager
-        - --master=http://kubernetes
+        - --master=http://127.0.0.1
         - --cloud-provider=rancher
         - --address=0.0.0.0
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
