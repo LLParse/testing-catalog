@@ -9,6 +9,7 @@ etcd:
     RANCHER_DEBUG: ${DEBUG}
   links:
   - data
+  - kubernetes
   volumes_from:
   - data
   net: container:kubernetes
@@ -43,8 +44,8 @@ kubernetes:
         - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
     image: rancher/k8s:v1.2.4-rancher7
-    links:
-    - etcd
+#    links:
+#    - etcd
 
 scheduler:
     command:
