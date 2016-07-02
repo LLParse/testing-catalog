@@ -33,8 +33,8 @@ kubernetes:
 #    health_check:
 #        request_line: GET /healthz HTTP/1.0
 #        port: 80
-#        interval: 3000
-#        response_timeout: 2000
+#        interval: 5000
+#        response_timeout: 3000
 #        unhealthy_threshold: 3
 #        healthy_threshold: 2
     retain_ip: true
@@ -43,8 +43,8 @@ kubernetes:
 #    health_check:
 #        request_line: GET /healthz HTTP/1.0
 #        port: 10251
-#        interval: 3000
-#        response_timeout: 2000
+#        interval: 5000
+#        response_timeout: 3000
 #        unhealthy_threshold: 3
 #        healthy_threshold: 2
 
@@ -52,8 +52,8 @@ kubernetes:
 #    health_check:
 #        request_line: GET /healthz HTTP/1.0
 #        port: 10252
-#        interval: 3000
-#        response_timeout: 2000
+#        interval: 5000
+#        response_timeout: 3000
 #        unhealthy_threshold: 3
 #        healthy_threshold: 2
 
@@ -66,8 +66,8 @@ kubernetes-lb:
         increment: 1
     health_check:
         port: 42
-        interval: 3000
-        response_timeout: 2000
+        interval: 5000
+        response_timeout: 3000
         healthy_threshold: 2
         unhealthy_threshold: 3
 
@@ -75,16 +75,16 @@ rancher-kubernetes-agent:
     health_check:
         request_line: GET /healthcheck HTTP/1.0
         port: 10240
-        interval: 3000
-        response_timeout: 2000
+        interval: 5000
+        response_timeout: 3000
         unhealthy_threshold: 3
         healthy_threshold: 2
 
 kubectld:
     health_check:
         port: 8091
-        interval: 3000
-        response_timeout: 2000
+        interval: 5000
+        response_timeout: 3000
         unhealthy_threshold: 3
         healthy_threshold: 2
 
@@ -93,8 +93,8 @@ rancher-ingress-controller:
     health_check:
         request_line: GET /healthz HTTP/1.0
         port: 10241
-        interval: 3000
-        response_timeout: 2000
+        interval: 5000
+        response_timeout: 3000
         unhealthy_threshold: 3
         healthy_threshold: 2
 
