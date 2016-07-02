@@ -57,7 +57,7 @@ controller-manager:
 
 kubernetes-lb:
     load_balancer_config:
-        haproxy_config: {"defaults": "timeout tunnel 3600000"}
+        haproxy_config: {"defaults": "timeout tunnel 86400000"}
     scale_policy:
         min: 1
         max: 2
