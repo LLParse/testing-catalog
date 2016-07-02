@@ -3,7 +3,6 @@ etcd:
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.container.start_once: 'true'
-    io.rancher.sidekicks: data,kubernetes,scheduler,controller-manager
   environment:
     ETCD_DATA_DIR: /data
     ETCDCTL_ENDPOINT: http://etcd:2379
@@ -12,6 +11,7 @@ etcd:
   - data
   volumes_from:
   - data
+  net: container:kubernetes
 
 data:
   image: busybox
@@ -28,6 +28,7 @@ kubernetes:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
         io.rancher.container.start_once: 'true'
+        io.rancher.sidekicks: data,etcd,scheduler,controller-manager
     command: 
         - kube-apiserver
         - --service-cluster-ip-range=10.43.0.0/16
@@ -44,7 +45,6 @@ kubernetes:
     image: rancher/k8s:v1.2.4-rancher7
     links:
     - etcd
-    net: container:etcd
 
 scheduler:
     command:
@@ -58,7 +58,7 @@ scheduler:
     - kubernetes
     labels:
         io.rancher.container.start_once: 'true'
-    net: container:etcd
+    net: container:kubernetes
 
 controller-manager:
     command:
@@ -78,7 +78,7 @@ controller-manager:
         io.rancher.container.start_once: 'true'
     links:
     - kubernetes
-    net: container:etcd
+    net: container:kubernetes
 
 kubernetes-lb:
     image: rancher/load-balancer-service
@@ -88,7 +88,7 @@ kubernetes-lb:
     - 6443/tcp
     - 80/tcp
     links:
-    - etcd
+    - kubernetes
 
 kubelet:
     labels:
