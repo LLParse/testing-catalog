@@ -44,13 +44,13 @@ kubernetes:
     image: rancher/k8s:v1.2.4-rancher7
     links:
     - etcd
+#        - --leader-elect=true
 
 scheduler:
     command:
         - kube-scheduler
         - --master=http://127.0.0.1
         - --address=0.0.0.0
-        - --leader-elect=true
     image: rancher/k8s:v1.2.4-rancher7
     links:
     - kubernetes
@@ -67,7 +67,6 @@ controller-manager:
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
-        - --leader-elect=true
     image: rancher/k8s:v1.2.4-rancher7
     labels:
         io.rancher.container.create_agent: "true"
