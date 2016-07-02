@@ -85,7 +85,7 @@ kubernetes-lb:
     labels:
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     expose:
-    - 443/tcp
+    - 6443/tcp
     - 80/tcp
     links:
     - kubernetes
