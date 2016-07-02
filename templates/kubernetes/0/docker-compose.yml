@@ -51,7 +51,7 @@ scheduler:
         - --master=127.0.0.1:80
         - --address=0.0.0.0
         - --port=10251
-        - --leader-elect=true
+#        - --leader-elect=true
     image: llparse/k8s:dev
     links:
     - kubernetes
@@ -67,7 +67,7 @@ controller-manager:
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
-        - --leader-elect=true
+#        - --leader-elect=true
     image: llparse/k8s:dev
     labels:
         io.rancher.container.create_agent: "true"
