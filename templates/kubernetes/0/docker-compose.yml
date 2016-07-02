@@ -27,7 +27,6 @@ kubernetes:
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
-        io.rancher.container.start_once: 'true'
     command: 
         - kube-apiserver
         - --service-cluster-ip-range=10.43.0.0/16
@@ -56,8 +55,6 @@ scheduler:
     image: llparse/k8s:dev
     links:
     - kubernetes
-    labels:
-        io.rancher.container.start_once: 'true'
     net: container:etcd
 
 controller-manager:
@@ -75,7 +72,6 @@ controller-manager:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
-        io.rancher.container.start_once: 'true'
     links:
     - kubernetes
     net: container:etcd
