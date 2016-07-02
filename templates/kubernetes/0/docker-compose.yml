@@ -88,7 +88,7 @@ kubernetes-lb:
     - 6443/tcp
     - 80/tcp
     links:
-    - kubernetes
+    - etcd
 
 kubelet:
     labels:
