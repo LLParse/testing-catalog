@@ -44,6 +44,7 @@ kubernetes:
     image: rancher/k8s:v1.2.4-rancher7
     links:
     - etcd
+    net: container:etcd
 
 scheduler:
     command:
@@ -57,7 +58,7 @@ scheduler:
     - kubernetes
     labels:
         io.rancher.container.start_once: 'true'
-    net: container:kubernetes
+    net: container:etcd
 
 controller-manager:
     command:
@@ -77,7 +78,7 @@ controller-manager:
         io.rancher.container.start_once: 'true'
     links:
     - kubernetes
-    net: container:kubernetes
+    net: container:etcd
 
 kubernetes-lb:
     image: rancher/load-balancer-service
