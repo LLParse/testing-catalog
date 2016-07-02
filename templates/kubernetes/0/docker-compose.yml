@@ -35,6 +35,7 @@ kubernetes:
         - --etcd-servers=http://etcd:2379
         - --insecure-bind-address=0.0.0.0
         - --insecure-port=80
+        - --secure-port=443
         - --cloud-provider=rancher
         - --allow_privileged=true
         - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota,ServiceAccount
@@ -49,8 +50,9 @@ kubernetes:
 scheduler:
     command:
         - kube-scheduler
-        - --master=http://127.0.0.1
+        - --master=127.0.0.1:80
         - --address=0.0.0.0
+        - --port=10251
     image: rancher/k8s:v1.2.4-rancher7
     links:
     - kubernetes
@@ -61,9 +63,10 @@ scheduler:
 controller-manager:
     command:
         - kube-controller-manager
-        - --master=http://127.0.0.1
+        - --master=127.0.0.1:80
         - --cloud-provider=rancher
         - --address=0.0.0.0
+        - --port=10252
         - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
         - --root-ca-file=/etc/kubernetes/ssl/ca.pem
         - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
@@ -81,7 +84,7 @@ kubernetes-lb:
     labels:
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     expose:
-    - 6443/tcp
+    - 443/tcp
     - 80/tcp
     links:
     - kubernetes
