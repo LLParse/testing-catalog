@@ -1,3 +1,89 @@
+etcd:
+  image: rancher/etcd:v2.3.6-2
+  labels:
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+    io.rancher.container.start_once: 'true'
+    io.rancher.sidekicks: data
+  environment:
+    ETCD_DATA_DIR: /data
+    ETCDCTL_ENDPOINT: http://etcd:2379
+    RANCHER_DEBUG: ${DEBUG}
+  links:
+  - data
+  volumes_from:
+    - data
+
+data:
+  image: busybox
+  entrypoint: /bin/true
+  net: none
+  volumes:
+  - /data
+  labels:
+    io.rancher.container.start_once: 'true'
+
+kubernetes:
+    labels:
+        io.rancher.container.create_agent: "true"
+        io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.start_once: 'true'
+        io.rancher.sidekicks: scheduler,controller-manager
+    command: 
+        - kube-apiserver
+        - --service-cluster-ip-range=10.43.0.0/16
+        - --etcd-servers=http://etcd:2379
+        - --insecure-bind-address=0.0.0.0
+        - --insecure-port=80
+        - --cloud-provider=rancher
+        - --allow_privileged=true
+        - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota,ServiceAccount
+        - --client-ca-file=/etc/kubernetes/ssl/ca.pem
+        - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
+        - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
+    image: rancher/k8s:v1.2.4-rancher7
+    links:
+    - etcd
+
+scheduler:
+    command:
+        - kube-scheduler
+        - --master=http://kubernetes
+        - --address=0.0.0.0
+        - --leader-elect=true
+    image: rancher/k8s:v1.2.4-rancher7
+    links:
+        - kubernetes
+    labels:
+        io.rancher.container.start_once: 'true'
+
+controller-manager:
+    command:
+        - kube-controller-manager
+        - --master=http://kubernetes
+        - --cloud-provider=rancher
+        - --address=0.0.0.0
+        - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
+        - --root-ca-file=/etc/kubernetes/ssl/ca.pem
+        - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
+        - --leader-elect=true
+    image: rancher/k8s:v1.2.4-rancher7
+    labels:
+        io.rancher.container.create_agent: "true"
+        io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.start_once: 'true'
+    links:
+    - kubernetes
+
+kubernetes-lb:
+    image: rancher/load-balancer-service
+    labels:
+        io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+    expose:
+    - 6443/tcp
+    - 80/tcp
+    links:
+    - kubernetes
+
 kubelet:
     labels:
         io.rancher.container.dns: "true"
@@ -26,7 +112,7 @@ kubelet:
     ipc: host
     privileged: true
     links:
-        - kubernetes-lb
+    - kubernetes-lb
 
 proxy:
     labels:
@@ -43,62 +129,7 @@ proxy:
     privileged: true
     net: host
     links:
-        - kubernetes-lb
-
-etcd:
-  image: rancher/etcd:v2.3.6-2
-  labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-    io.rancher.container.start_once: 'true'
-    io.rancher.sidekicks: data
-  environment:
-    ETCD_DATA_DIR: /data
-    ETCDCTL_ENDPOINT: http://etcd:2379
-    RANCHER_DEBUG: ${DEBUG}
-  links:
-  - data
-  volumes_from:
-    - data
-
-data:
-  image: busybox
-  entrypoint: /bin/true
-  net: none
-  volumes:
-  - /data
-  labels:
-    io.rancher.container.start_once: 'true'
-
-kubernetes-lb:
-    image: rancher/load-balancer-service
-    labels:
-        io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-    expose:
-    - 6443/tcp
-    - 80/tcp
-    links:
-    - kubernetes
-
-kubernetes:
-    labels:
-        io.rancher.container.create_agent: "true"
-        io.rancher.container.agent.role: environmentAdmin
-        io.rancher.container.start_once: 'true'
-    command: 
-        - kube-apiserver
-        - --service-cluster-ip-range=10.43.0.0/16
-        - --etcd-servers=http://etcd:2379
-        - --insecure-bind-address=0.0.0.0
-        - --insecure-port=80
-        - --cloud-provider=rancher
-        - --allow_privileged=true
-        - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota,ServiceAccount
-        - --client-ca-file=/etc/kubernetes/ssl/ca.pem
-        - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
-        - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
-    image: rancher/k8s:v1.2.4-rancher7
-    links:
-        - etcd
+    - kubernetes-lb
 
 kubectld:
     labels:
@@ -108,34 +139,6 @@ kubectld:
         SERVER: http://kubernetes-lb
         LISTEN: ":8091"
     image: rancher/kubectld:v0.2.0
-    links:
-        - kubernetes-lb
-
-scheduler:
-    command:
-        - kube-scheduler
-        - --master=http://kubernetes-lb
-        - --address=0.0.0.0
-    image: rancher/k8s:v1.2.4-rancher7
-    links:
-        - kubernetes-lb
-    labels:
-        io.rancher.container.start_once: 'true'
-
-controller-manager:
-    command:
-        - kube-controller-manager
-        - --master=http://kubernetes-lb
-        - --cloud-provider=rancher
-        - --address=0.0.0.0
-        - --kubeconfig=/etc/kubernetes/ssl/kubeconfig
-        - --root-ca-file=/etc/kubernetes/ssl/ca.pem
-        - --service-account-private-key-file=/etc/kubernetes/ssl/key.pem
-    image: rancher/k8s:v1.2.4-rancher7
-    labels:
-        io.rancher.container.create_agent: "true"
-        io.rancher.container.agent.role: environmentAdmin
-        io.rancher.container.start_once: 'true'
     links:
         - kubernetes-lb
 

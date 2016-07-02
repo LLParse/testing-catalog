@@ -4,33 +4,6 @@
   description: Rancher Kubernetes service
   minimum_rancher_version: v1.1.0
 
-kubernetes-lb:
-    load_balancer_config:
-        haproxy_config: {"defaults": "timeout tunnel 3600000"}
-    scale_policy:
-        min: 1
-        max: 2
-        increment: 1
-    health_check:
-        port: 42
-        interval: 3000
-        response_timeout: 2000
-        healthy_threshold: 2
-        unhealthy_threshold: 3
-
-kubernetes:
-    metadata:
-        sans:
-        - "IP:10.43.0.1"
-    health_check:
-        request_line: GET /healthz HTTP/1.0
-        port: 80
-        interval: 3000
-        response_timeout: 2000
-        unhealthy_threshold: 3
-        healthy_threshold: 2
-    retain_ip: true
-
 etcd:
     scale_policy:
         min: 1
@@ -47,14 +20,22 @@ etcd:
         unhealthy_threshold: 3
         healthy_threshold: 2
 
-rancher-kubernetes-agent:
+kubernetes:
+    scale_policy:
+        min: 1
+        max: 3
+        increment: 1
+    metadata:
+        sans:
+        - "IP:10.43.0.1"
     health_check:
-        request_line: GET /healthcheck HTTP/1.0
-        port: 10240
+        request_line: GET /healthz HTTP/1.0
+        port: 80
         interval: 3000
         response_timeout: 2000
         unhealthy_threshold: 3
         healthy_threshold: 2
+    retain_ip: true
 
 scheduler:
     health_check:
@@ -69,6 +50,29 @@ controller-manager:
     health_check:
         request_line: GET /healthz HTTP/1.0
         port: 10252
+        interval: 3000
+        response_timeout: 2000
+        unhealthy_threshold: 3
+        healthy_threshold: 2
+
+kubernetes-lb:
+    load_balancer_config:
+        haproxy_config: {"defaults": "timeout tunnel 3600000"}
+    scale_policy:
+        min: 1
+        max: 2
+        increment: 1
+    health_check:
+        port: 42
+        interval: 3000
+        response_timeout: 2000
+        healthy_threshold: 2
+        unhealthy_threshold: 3
+
+rancher-kubernetes-agent:
+    health_check:
+        request_line: GET /healthcheck HTTP/1.0
+        port: 10240
         interval: 3000
         response_timeout: 2000
         unhealthy_threshold: 3
