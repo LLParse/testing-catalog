@@ -37,23 +37,25 @@ kubernetes:
         healthy_threshold: 2
     retain_ip: true
 
-scheduler:
-    health_check:
-        request_line: GET /healthz HTTP/1.0
-        port: 10251
-        interval: 3000
-        response_timeout: 2000
-        unhealthy_threshold: 3
-        healthy_threshold: 2
+# Sidekick health checks don't work?
 
-controller-manager:
-    health_check:
-        request_line: GET /healthz HTTP/1.0
-        port: 10252
-        interval: 3000
-        response_timeout: 2000
-        unhealthy_threshold: 3
-        healthy_threshold: 2
+#scheduler:
+#    health_check:
+#        request_line: GET /healthz HTTP/1.0
+#        port: 10251
+#        interval: 3000
+#        response_timeout: 2000
+#        unhealthy_threshold: 3
+#        healthy_threshold: 2
+
+#controller-manager:
+#    health_check:
+#        request_line: GET /healthz HTTP/1.0
+#        port: 10252
+#        interval: 3000
+#        response_timeout: 2000
+#        unhealthy_threshold: 3
+#        healthy_threshold: 2
 
 kubernetes-lb:
     load_balancer_config:
