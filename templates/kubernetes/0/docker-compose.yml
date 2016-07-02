@@ -34,7 +34,7 @@ kubernetes:
         - --etcd-servers=http://127.0.0.1:2379
         - --insecure-bind-address=0.0.0.0
         - --insecure-port=80
-        - --secure-port=443
+        - --secure-port=6443
         - --cloud-provider=rancher
         - --allow_privileged=true
         - --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ResourceQuota,ServiceAccount
