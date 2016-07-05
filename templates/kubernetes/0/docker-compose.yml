@@ -1,31 +1,8 @@
-etcd:
-  image: rancher/etcd:v2.3.6-2
-  labels:
-    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-    io.rancher.container.start_once: 'true'
-    io.rancher.sidekicks: data,kubernetes,scheduler,controller-manager
-  environment:
-    ETCD_DATA_DIR: /data
-    ETCDCTL_ENDPOINT: http://etcd:2379
-    RANCHER_DEBUG: ${DEBUG}
-  links:
-    - data
-  volumes_from:
-    - data
-
-data:
-  image: busybox
-  entrypoint: /bin/true
-  net: none
-  volumes:
-    - /data
-  labels:
-    io.rancher.container.start_once: 'true'
-
 kubernetes:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.sidekicks: data,etcd,scheduler,controller-manager
     command: 
         - kube-apiserver
         - --apiserver-count=3
@@ -41,9 +18,31 @@ kubernetes:
         - --tls-cert-file=/etc/kubernetes/ssl/cert.pem
         - --tls-private-key-file=/etc/kubernetes/ssl/key.pem
     image: llparse/k8s:dev
-    links:
-        - etcd
-    net: container:etcd
+
+data:
+  image: busybox
+  entrypoint: /bin/true
+  net: none
+  volumes:
+    - /data
+  labels:
+    io.rancher.container.start_once: 'true'
+
+etcd:
+  image: rancher/etcd:v2.3.6-2
+  labels:
+    io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
+    io.rancher.container.start_once: 'true'
+  environment:
+    ETCD_DATA_DIR: /data
+    ETCDCTL_ENDPOINT: http://etcd:2379
+    RANCHER_DEBUG: ${DEBUG}
+  links:
+    - kubernetes
+    - data
+  volumes_from:
+    - data
+  net: container:kubernetes
 
 scheduler:
     command:
@@ -55,7 +54,7 @@ scheduler:
     image: llparse/k8s:dev
     links:
     - kubernetes
-    net: container:etcd
+    net: container:kubernetes
 
 controller-manager:
     command:
@@ -74,7 +73,7 @@ controller-manager:
         io.rancher.container.agent.role: environmentAdmin
     links:
     - kubernetes
-    net: container:etcd
+    net: container:kubernetes
 
 kubernetes-lb:
     image: rancher/load-balancer-service
@@ -84,7 +83,7 @@ kubernetes-lb:
     - 6443/tcp
     - 80/tcp
     links:
-    - etcd
+    - kubernetes
 
 kubelet:
     labels:
