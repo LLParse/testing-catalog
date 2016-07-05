@@ -24,7 +24,6 @@ data:
 
 kubernetes:
     labels:
-        io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
     command: 
