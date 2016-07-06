@@ -26,6 +26,7 @@ kubernetes:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.dns: 'true'
     command: 
         - kube-apiserver
 #        - --apiserver-count=3
@@ -46,6 +47,8 @@ kubernetes:
     net: container:etcd
 
 scheduler:
+    labels:
+        io.rancher.container.dns: 'true'
     command:
         - kube-scheduler
         - --master=127.0.0.1:80
@@ -72,6 +75,7 @@ controller-manager:
     labels:
         io.rancher.container.create_agent: "true"
         io.rancher.container.agent.role: environmentAdmin
+        io.rancher.container.dns: 'true'
     links:
     - kubernetes
     net: container:etcd
