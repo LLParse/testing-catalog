@@ -18,6 +18,7 @@ glusterfs-daemon:
     io.rancher.container.network: 'true'
     io.rancher.container.hostname_override: container_name
     io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/glusterfs-server
+    io.rancher.container.start_once: true
   command: glusterd -p /var/run/gluster.pid --no-daemon --log-file=-
 glusterfs-volume-create:
   image: rancher/glusterfs:v0.2.1
