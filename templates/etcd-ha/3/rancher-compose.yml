@@ -37,3 +37,6 @@ etcd:
     response_timeout: 5000
     healthy_threshold: 2
     unhealthy_threshold: 4
+    strategy: recreateOnQuorum
+    recreate_on_quorum_strategy_config:
+      quorum: 2
