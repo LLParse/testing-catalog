@@ -1,5 +1,5 @@
 etcd:
-  image: llparse/etcd:v2.3.6-2
+  image: llparse/etcd:v2.3.6-4
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     #io.rancher.container.start_once: 'true'
