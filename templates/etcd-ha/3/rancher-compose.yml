@@ -5,12 +5,6 @@
     Distributed highly-available key-value store
   minimum_rancher_version: v1.1.0-rc2
   questions:
-    - variable: MIN_SCALE
-      description: Minimum cluster size, should be an odd number
-      label: Min Scale
-      type: int
-      default: 3
-      required: true
     - variable: MAX_SCALE
       description: Maximum cluster size, should be an odd number
       label: Max Scale
@@ -24,19 +18,19 @@
       default: false
 etcd:
   scale_policy:
-    min: ${MIN_SCALE}
+    min: 1
     max: ${MAX_SCALE}
     increment: 1
   metadata:
     scale_policy:
-      min: ${MIN_SCALE}
+      min: 1
   health_check:
     port: 2379
-    request_line: '/health'
     interval: 7500
     response_timeout: 5000
     healthy_threshold: 2
     unhealthy_threshold: 4
-    strategy: recreateOnQuorum
-    recreate_on_quorum_strategy_config:
-      quorum: 2
+    strategy: none
+    #strategy: recreateOnQuorum
+    #recreate_on_quorum_strategy_config:
+    #  quorum: 2
