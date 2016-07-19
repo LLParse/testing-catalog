@@ -1,5 +1,5 @@
 name: Etcd
 description: |
   A highly-available key/value store
-version: 2.3.6-rancher2
+version: 2.3.6-rancher5
 category: Clustering
