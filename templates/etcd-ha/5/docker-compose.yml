@@ -2,14 +2,20 @@ etcd:
   image: llparse/etcd:v3.0.3
   labels:
     io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-    io.rancher.sidekicks: data
+    io.rancher.sidekicks: etcd-hc,data
   environment:
     ETCD_DATA_DIR: /data
     RANCHER_DEBUG: ${DEBUG}
   links:
+  - etcd-hc
   - data
   volumes_from:
   - data
+
+etcd-hc:
+  image: llparse/etcd:v3.0.3
+  entrypoint: /usr/bin/etcdhc
+  net: container:etcd
 
 data:
   image: busybox
