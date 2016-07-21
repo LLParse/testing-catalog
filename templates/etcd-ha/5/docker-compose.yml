@@ -14,7 +14,7 @@ etcd:
 
 data:
   image: busybox
-  command: /bin/true
+  entrypoint: /bin/true
   net: none
   volumes:
   - /data
