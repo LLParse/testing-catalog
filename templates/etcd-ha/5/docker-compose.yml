@@ -6,21 +6,22 @@ etcd:
   environment:
     ETCD_DATA_DIR: /data
     RANCHER_DEBUG: ${DEBUG}
-  links:
-  - etcd-hc
-  - data
   volumes_from:
   - data
 
 etcd-hc:
   image: llparse/etcd:v3.0.3
   entrypoint: /usr/bin/etcdhc
+  links:
+  - etcd
   net: container:etcd
 
 data:
   image: busybox
   entrypoint: /bin/true
   net: none
+  links:
+  - etcd
   volumes:
   - /data
   labels:
