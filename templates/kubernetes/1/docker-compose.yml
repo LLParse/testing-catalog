@@ -82,7 +82,7 @@ kubernetes:
     command: 
         - kube-apiserver
         - --service-cluster-ip-range=10.43.0.0/16
-        - --etcd-servers=http://etcd.Kubernetes:2379
+        - --etcd-servers=http://etcd:2379
         - --insecure-bind-address=0.0.0.0
         - --insecure-port=80
         - --cloud-provider=rancher
