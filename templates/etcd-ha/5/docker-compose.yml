@@ -11,10 +11,8 @@ etcd:
 
 etcd-hc:
   image: llparse/etcd:v3.0.3
-  environment:
-    RANCHER_DEBUG: '${DEBUG}'
   entrypoint: /usr/bin/etcdhc
-  command: proxy --port=:2378 --wait=30s
+  command: proxy --port=:2378 --wait=30s --debug
   links:
   - etcd
   net: container:etcd
