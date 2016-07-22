@@ -1,5 +1,5 @@
 etcd:
-  image: llparse/etcd:v3.0.3
+  image: llparse/etcd:v2.3.7
   labels:
     io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
     io.rancher.sidekicks: etcd-hc,data
@@ -10,7 +10,7 @@ etcd:
   - data
 
 etcd-hc:
-  image: llparse/etcd:v3.0.3
+  image: llparse/etcd:v2.3.7
   environment:
     RANCHER_DEBUG: '${DEBUG}'
   entrypoint: /usr/bin/etcdhc
