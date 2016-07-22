@@ -1,5 +1,5 @@
 name: Etcd
 description: |
   A highly-available key/value store
-version: 3.0.3-2
+version: 2.3.7-2
 category: Clustering
