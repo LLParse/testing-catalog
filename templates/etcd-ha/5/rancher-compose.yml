@@ -21,6 +21,7 @@ etcd:
     increment: 1
   health_check:
     port: 2378
+    request_line: '/health'
     interval: 5000
     response_timeout: 3000
     unhealthy_threshold: 2
