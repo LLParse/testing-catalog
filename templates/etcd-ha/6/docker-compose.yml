@@ -5,12 +5,14 @@ etcd:
     io.rancher.sidekicks: etcd-hc,data
   environment:
     ETCD_DATA_DIR: /data
-    RANCHER_DEBUG: ${DEBUG}
+    RANCHER_DEBUG: '${DEBUG}'
   volumes_from:
   - data
 
 etcd-hc:
   image: llparse/etcd:v3.0.3
+  environment:
+    RANCHER_DEBUG: '${DEBUG}'
   entrypoint: /usr/bin/etcdhc
   command: proxy --port=:2378 --wait=30s
   links:
