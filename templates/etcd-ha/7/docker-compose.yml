@@ -14,7 +14,7 @@ etcd-hc:
   environment:
     RANCHER_DEBUG: '${DEBUG}'
   entrypoint: /usr/bin/etcdhc
-  command: proxy --port=:2378 --wait=3s
+  command: proxy --port=:2378 --raft
   links:
   - etcd
   net: container:etcd
