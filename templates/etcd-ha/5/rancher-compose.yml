@@ -15,6 +15,7 @@
     default: true
     type: boolean
 etcd:
+  retain_ip: true
   scale_policy:
     min: 1
     max: ${SCALE}
