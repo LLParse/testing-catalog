@@ -1,5 +1,0 @@
-name: K8s
-description: |
-  Kubernetes service
-version: v1.2.4-rancher8
-category: SystemStack
