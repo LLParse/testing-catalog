@@ -57,6 +57,7 @@ etcd:
         BACKUP_RETENTION: 5m
     volumes:
     - etcd:/pdata
+    - /var/etcd/backups:/data-backup
     volumes_from:
     - data
 
