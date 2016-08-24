@@ -46,39 +46,19 @@ proxy:
         - kubernetes:master
 
 etcd:
-    image: llparse/etcd:v2.3.7-7
+    image: llparse/etcd:v2.3.7-8
     labels:
         io.rancher.scheduler.affinity:host_label_soft: etcd=true
         io.rancher.scheduler.affinity:container_label_ne: io.rancher.stack_service.name=$${stack_name}/$${service_name}
-        io.rancher.sidekicks: backup,pdata,data
+        io.rancher.sidekicks: data
     environment:
         RANCHER_DEBUG: 'true'
-    volumes_from:
-    - data
-    - pdata
-
-backup:
-    image: llparse/etcd:v2.3.7-7
-    command: rolling_backup
-    labels:
-        io.rancher.scheduler.affinity:host_label_soft: etcd=true
-    environment:
         BACKUP_PERIOD: 30s
         BACKUP_RETENTION: 5m
-    net: container:etcd
-    volumes:
-    - /var/etcd/backups:/data-backup
-    volumes_from:
-    - pdata
-
-pdata:
-    image: busybox
-    entrypoint: /bin/true
-    net: none
     volumes:
     - etcd:/pdata
-    labels:
-        io.rancher.container.start_once: 'true'
+    volumes_from:
+    - data
 
 data:
     image: busybox
