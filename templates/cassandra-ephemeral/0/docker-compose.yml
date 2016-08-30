@@ -1,4 +1,4 @@
 cassandra:
-  image: cassandra:3.7
+  image: llparse/cassandra:v3.7
   volumes:
   - /var/lib/cassandra
