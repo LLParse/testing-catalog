@@ -1,4 +1,6 @@
 cassandra:
   image: llparse/cassandra:v3.7
+  labels:
+    io.rancher.container.pull_image: always
   volumes:
   - /var/lib/cassandra
