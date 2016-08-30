@@ -4,5 +4,6 @@ cassandra:
     io.rancher.container.pull_image: always
   environment:
     RANCHER_DEBUG: 'true'
+    CASSANDRA_NAME: Rancher Cluster
   volumes:
   - /var/lib/cassandra

@@ -1,3 +1,10 @@
 .catalog:
   version: 3.7
   minimum_rancher_version: v1.0.0
+cassandra:
+  health_check:
+    port: 9042
+    interval: 5000
+    response_timeout: 3000
+    healthy_threshold: 1
+    unhealthy_threshold: 2

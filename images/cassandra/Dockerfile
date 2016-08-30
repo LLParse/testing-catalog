@@ -7,3 +7,4 @@ RUN \
 
 ADD rancher-entrypoint.sh /
 ENTRYPOINT ["/rancher-entrypoint.sh"]
+CMD ["cassandra", "-f"]
