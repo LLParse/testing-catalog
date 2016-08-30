@@ -1,0 +1,5 @@
+name: Cassandra [Ephemeral]
+description: |
+  A fault-tolerant, elastically-scalable NoSQL database
+version: 3.7
+category: Databases
