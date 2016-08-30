@@ -2,5 +2,7 @@ cassandra:
   image: llparse/cassandra:v3.7
   labels:
     io.rancher.container.pull_image: always
+  environment:
+    RANCHER_DEBUG: 'true'
   volumes:
   - /var/lib/cassandra
