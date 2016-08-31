@@ -11,7 +11,7 @@ export CASSANDRA_LISTEN_ADDRESS=$IP
 if [ "$SERVICE_NAME" == "cassandra" ]; then
   for container in $(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers); do
     meta_index=$(echo $container | tr '=' '\n' | head -n1)
-    container_ip=$(wget -q -O - ${META_URL}/stacks/${STACK_NAME}/services/seed/containers/${meta_index}/primary_ip)
+    container_ip=$(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers/${meta_index}/primary_ip)
     if [ "$CASSANDRA_SEEDS" == "" ]; then
       export CASSANDRA_SEEDS=$container_ip
     else
