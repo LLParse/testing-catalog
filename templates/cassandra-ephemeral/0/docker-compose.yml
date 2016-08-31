@@ -6,6 +6,8 @@ seed:
   environment:
     RANCHER_DEBUG: 'true'
     CASSANDRA_CLUSTER_NAME: ${CLUSTER_NAME}
+    HEAP_NEWSIZE: ${HEAP_NEWSIZE}
+    MAX_HEAP_SIZE: ${MAX_HEAP_SIZE}
   volumes:
   - /var/lib/cassandra
 cassandra:
@@ -16,6 +18,8 @@ cassandra:
   environment:
     RANCHER_DEBUG: 'true'
     CASSANDRA_CLUSTER_NAME: ${CLUSTER_NAME}
+    HEAP_NEWSIZE: ${HEAP_NEWSIZE}
+    MAX_HEAP_SIZE: ${MAX_HEAP_SIZE}
   links:
   - seed
   volumes:

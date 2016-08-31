@@ -20,6 +20,18 @@
     required: true
     default: Rancher Cluster
     type: string
+  - variable: HEAP_NEWSIZE
+    description: The initial heap size of the JVM
+    label: Initial Heap Size
+    required: true
+    default: 800M
+    type: string
+  - variable: MAX_HEAP_SIZE
+    description: The maximum heap size of the JVM
+    label: Max Heap Size
+    required: true
+    default: 4G
+    type: string
 seed:
   scale: ${NUM_SEEDS}
   retain_ip: true

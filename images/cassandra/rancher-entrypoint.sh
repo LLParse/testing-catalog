@@ -9,6 +9,8 @@ SERVICE_NAME=$(curl -s ${META_URL}/self/service/name)
 export CASSANDRA_LISTEN_ADDRESS=$IP
 
 if [ "$SERVICE_NAME" == "cassandra" ]; then
+  unset CASSANDRA_SEEDS
+  # TODO gate for seed nodes (look @ scale?)
   for container in $(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers); do
     meta_index=$(echo $container | tr '=' '\n' | head -n1)
     container_ip=$(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers/${meta_index}/primary_ip)
