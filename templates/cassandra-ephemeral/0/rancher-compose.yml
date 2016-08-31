@@ -1,7 +1,37 @@
 .catalog:
   version: 3.7
   minimum_rancher_version: v1.0.0
+  questions:
+  - variable: NUM_SEEDS
+    description: Number of Seed Nodes
+    label: Desired number of seed nodes. 2 is a good number for resiliency
+    required: true
+    default: 0
+    type: int
+  - variable: NUM_NODES
+    description: Desired number of Cassandra nodes. Clustering occurs by connecting to seed nodes.
+    label: Number of Normal Nodes
+    required: true
+    default: 1
+    type: int
+  - variable: CLUSTER_NAME
+    description: Desired name for the cluster
+    label: Cluster Name
+    required: true
+    default: Rancher Cluster
+    type: string
+seed:
+  scale: ${NUM_SEEDS}
+  retain_ip: true
+  health_check:
+    port: 9042
+    interval: 5000
+    response_timeout: 3000
+    healthy_threshold: 1
+    unhealthy_threshold: 2
 cassandra:
+  scale: ${NUM_NODES}
+  retain_ip: true
   health_check:
     port: 9042
     interval: 5000

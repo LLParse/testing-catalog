@@ -3,7 +3,22 @@ if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 META_URL=http://rancher-metadata.rancher.internal/2015-12-19
 IP=$(curl -s ${META_URL}/self/container/primary_ip)
+STACK_NAME=$(curl -s ${META_URL}/self/stack/name)
+SERVICE_NAME=$(curl -s ${META_URL}/self/service/name)
+
 export CASSANDRA_LISTEN_ADDRESS=$IP
+
+if [ "$SERVICE_NAME" == "cassandra" ]; then
+  for container in $(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers); do
+    meta_index=$(echo $container | tr '=' '\n' | head -n1)
+    container_ip=$(wget -q -O - ${META_URL}/stacks/${STACK_NAME}/services/seed/containers/${meta_index}/primary_ip)
+    if [ "$CASSANDRA_SEEDS" == "" ]; then
+      export CASSANDRA_SEEDS=$container_ip
+    else
+      export CASSANDRA_SEEDS="${CASSANDRA_SEEDS},${container_ip}"
+    fi
+  done
+fi
 
 # first arg is `-f` or `--some-option`
 if [ "${1:0:1}" = '-' ]; then
