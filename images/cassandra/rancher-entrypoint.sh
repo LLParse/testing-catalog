@@ -2,18 +2,53 @@
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 META_URL=http://rancher-metadata.rancher.internal/2015-12-19
-IP=$(curl -s ${META_URL}/self/container/primary_ip)
-STACK_NAME=$(curl -s ${META_URL}/self/stack/name)
-SERVICE_NAME=$(curl -s ${META_URL}/self/service/name)
+ip=$(curl -s ${META_URL}/self/container/primary_ip)
+stack_name=$(curl -s ${META_URL}/self/stack/name)
+service_name=$(curl -s ${META_URL}/self/service/name)
 
-export CASSANDRA_LISTEN_ADDRESS=$IP
+# Find a node with an open JMX port
+nodetool_remote() {
+  target=
+  for service in seed cassandra; do
+    for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/${service}/containers); do
+      meta_index=$(echo $container | tr '=' '\n' | head -n1)
+      container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/${service}/containers/${meta_index}/primary_ip)
 
-if [ "$SERVICE_NAME" == "cassandra" ]; then
-  unset CASSANDRA_SEEDS
+      if >/dev/tcp/${container_ip}/7199; then
+        target=$container_ip
+        break 2
+      fi
+    done
+    if [ "$target" != "" ]; then
+      nodetool --host $target $@
+    else
+      echo "No nodes available"
+    fi
+  done
+}
+
+
+
+# unset environment variables from previous runs
+unset JVM_OPTS
+unset CASSANDRA_SEEDS
+
+# bind to overlay network
+export CASSANDRA_LISTEN_ADDRESS=$ip
+
+# expose JMX port for remote management
+export JVM_OPTS="$JVM_OPTS -Djava.rmi.server.hostname=${ip}"
+
+# check if we are replacing a dead node
+if [ "$(nodetool_remote status | grep $ip)" ] && [ ! -d "/var/lib/cassandra/data" ]; then
+  export JVM_OPTS="$JVM_OPTS -Dcassandra.replace_address=${ip}"
+fi
+
+if [ "$service_name" == "cassandra" ]; then
   # TODO gate for seed nodes (look @ scale?)
-  for container in $(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers); do
+  for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers); do
     meta_index=$(echo $container | tr '=' '\n' | head -n1)
-    container_ip=$(curl -s ${META_URL}/stacks/${STACK_NAME}/services/seed/containers/${meta_index}/primary_ip)
+    container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers/${meta_index}/primary_ip)
     if [ "$CASSANDRA_SEEDS" == "" ]; then
       export CASSANDRA_SEEDS=$container_ip
     else
