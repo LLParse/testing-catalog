@@ -30,8 +30,6 @@ nodetool_remote() {
   fi
 }
 
-
-
 # unset environment variables from previous runs
 unset JVM_OPTS
 unset CASSANDRA_SEEDS
@@ -51,7 +49,7 @@ if [ "$(nodetool_remote status | grep $ip)" ] && [ ! -d "/var/lib/cassandra/data
 fi
 
 if [ "$service_name" == "cassandra" ]; then
-  # TODO gate for seed nodes (look @ scale?)
+  # TODO gate for seed nodes (look @ scale?) or implement seed provider (even better)
   for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers); do
     meta_index=$(echo $container | tr '=' '\n' | head -n1)
     container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers/${meta_index}/primary_ip)
