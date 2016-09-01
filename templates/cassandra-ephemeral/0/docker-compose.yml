@@ -2,7 +2,7 @@ seed:
   image: llparse/cassandra:v3.7
   labels:
     io.rancher.container.pull_image: always
-    io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/seed,io.rancher.stack_service.name=$${stack_name}/cassandra
+    io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/cassandra,io.rancher.stack_service.name=$${stack_name}/seed
   environment:
     RANCHER_DEBUG: 'true'
     CASSANDRA_CLUSTER_NAME: ${CLUSTER_NAME}
@@ -14,7 +14,7 @@ cassandra:
   image: llparse/cassandra:v3.7
   labels:
     io.rancher.container.pull_image: always
-    io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/seed,io.rancher.stack_service.name=$${stack_name}/cassandra
+    io.rancher.scheduler.affinity:container_label_soft_ne: io.rancher.stack_service.name=$${stack_name}/cassandra,io.rancher.stack_service.name=$${stack_name}/seed
   environment:
     RANCHER_DEBUG: 'true'
     CASSANDRA_CLUSTER_NAME: ${CLUSTER_NAME}

@@ -2,6 +2,8 @@
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 META_URL=http://rancher-metadata.rancher.internal/2015-12-19
+JMX_PORT=7199
+
 ip=$(curl -s ${META_URL}/self/container/primary_ip)
 stack_name=$(curl -s ${META_URL}/self/stack/name)
 service_name=$(curl -s ${META_URL}/self/service/name)
@@ -14,17 +16,18 @@ nodetool_remote() {
       meta_index=$(echo $container | tr '=' '\n' | head -n1)
       container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/${service}/containers/${meta_index}/primary_ip)
 
-      if >/dev/tcp/${container_ip}/7199; then
+      >/dev/tcp/${container_ip}/7199
+      if [ "$?" == "0" ]; then
         target=$container_ip
         break 2
       fi
     done
-    if [ "$target" != "" ]; then
-      nodetool --host $target $@
-    else
-      echo "No nodes available"
-    fi
   done
+  if [ "$target" != "" ]; then
+    nodetool --host $target $@
+  else
+    echo "No nodes available"
+  fi
 }
 
 
@@ -36,8 +39,11 @@ unset CASSANDRA_SEEDS
 # bind to overlay network
 export CASSANDRA_LISTEN_ADDRESS=$ip
 
-# expose JMX port for remote management
+# enable remote JMX port
 export JVM_OPTS="$JVM_OPTS -Djava.rmi.server.hostname=${ip}"
+export JVM_OPTS="$JVM_OPTS -Dcassandra.jmx.remote.port=$JMX_PORT"
+export JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.rmi.port=$JMX_PORT"
+export JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
 
 # check if we are replacing a dead node
 if [ "$(nodetool_remote status | grep $ip)" ] && [ ! -d "/var/lib/cassandra/data" ]; then
