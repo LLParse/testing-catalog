@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker build -t rancher-cassandra .
+id=$(docker run -d rancher-cassandra sleep 60)
+rm -rf target
+docker cp $id:/usr/src/app/target . 
+docker rm -f $id
