@@ -1,0 +1,58 @@
+.catalog:
+  version: 3.7
+  minimum_rancher_version: v1.0.0
+  questions:
+  - variable: NUM_SEEDS
+    description: Number of Seed Nodes
+    label: Desired number of seed nodes. 2 is a good number for resiliency
+    required: true
+    default: 0
+    type: int
+  - variable: NUM_NODES
+    description: Desired number of Cassandra nodes. Clustering occurs by connecting to seed nodes.
+    label: Number of Normal Nodes
+    required: true
+    default: 1
+    type: int
+  - variable: CLUSTER_NAME
+    description: Desired name for the cluster
+    label: Cluster Name
+    required: true
+    default: Rancher Cluster
+    type: string
+  - variable: HEAP_NEWSIZE
+    description: The initial heap size of the JVM
+    label: Initial Heap Size
+    required: true
+    default: 800M
+    type: string
+  - variable: MAX_HEAP_SIZE
+    description: The maximum heap size of the JVM
+    label: Max Heap Size
+    required: true
+    default: 4G
+    type: string
+  - variable: VOLUME_MOUNT
+    description: Specify absolute path for a host bind mount or a named volume
+    label: Volume Mount Path
+    required: true
+    default: cassandra
+    type: string
+seed:
+  scale: ${NUM_SEEDS}
+  retain_ip: true
+  health_check:
+    port: 9042
+    interval: 5000
+    response_timeout: 3000
+    healthy_threshold: 1
+    unhealthy_threshold: 2
+cassandra:
+  scale: ${NUM_NODES}
+  retain_ip: true
+  health_check:
+    port: 9042
+    interval: 5000
+    response_timeout: 3000
+    healthy_threshold: 1
+    unhealthy_threshold: 2
