@@ -15,7 +15,7 @@
     default: 1
     type: int
   - variable: CLUSTER_NAME
-    description: Desired name for the cluster
+    description: Desired name for the cluster (if lauching over existing data, names must match previous deployment)
     label: Cluster Name
     required: true
     default: Rancher Cluster
@@ -33,8 +33,8 @@
     default: 4G
     type: string
   - variable: VOLUME_MOUNT
-    description: Specify absolute path for a host bind mount or a named volume
-    label: Volume Mount Path
+    description: "Absolute path for a host bind mount or <[a-zA-Z0-9][a-zA-Z0-9_.-]*> for a named volume"
+    label: Persistence Location
     required: true
     default: cassandra
     type: string
