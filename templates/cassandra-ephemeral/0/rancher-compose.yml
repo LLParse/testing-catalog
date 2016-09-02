@@ -32,15 +32,6 @@
     required: true
     default: 4G
     type: string
-seed:
-  scale: ${NUM_SEEDS}
-  retain_ip: true
-  health_check:
-    port: 9042
-    interval: 5000
-    response_timeout: 3000
-    healthy_threshold: 1
-    unhealthy_threshold: 2
 cassandra:
   scale: ${NUM_NODES}
   retain_ip: true

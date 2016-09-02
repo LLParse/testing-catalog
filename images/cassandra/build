@@ -3,5 +3,9 @@
 ACCT=${ACCT:-llparse}
 VERSION=${VERSION:-v3.7}
 
+cd java
+./build
+cd -
+
 docker build -t $ACCT/cassandra:$VERSION .
 docker push $ACCT/cassandra:$VERSION

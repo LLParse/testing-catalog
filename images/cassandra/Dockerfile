@@ -5,8 +5,7 @@ RUN \
   apt-get install -y curl && \
   rm -rf /var/lib/apt/lists/*
 
-ADD rancher-entrypoint.sh /
-ADD java/target/*.jar /usr/share/cassandra/lib/
 ADD cassandra.yaml /etc/cassandra
+ADD java/target/rancher-cassandra.jar rancher-entrypoint.sh /
 ENTRYPOINT ["/rancher-entrypoint.sh"]
 CMD ["cassandra", "-f"]

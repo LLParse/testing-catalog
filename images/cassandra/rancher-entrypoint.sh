@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 META_URL=http://rancher-metadata.rancher.internal/2015-12-19
@@ -30,14 +30,11 @@ nodetool_remote() {
   fi
 }
 
-# unset environment variables from previous runs
-unset JVM_OPTS
-unset CASSANDRA_SEEDS
-
 # bind to overlay network
 export CASSANDRA_LISTEN_ADDRESS=$ip
 
 # enable remote JMX port
+unset JVM_OPTS
 export JVM_OPTS="$JVM_OPTS -Djava.rmi.server.hostname=${ip}"
 export JVM_OPTS="$JVM_OPTS -Dcassandra.jmx.remote.port=$JMX_PORT"
 export JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.rmi.port=$JMX_PORT"
@@ -48,6 +45,11 @@ if [ "$(nodetool_remote status | grep $ip)" ] && [ ! -d "/var/lib/cassandra/data
   export JVM_OPTS="$JVM_OPTS -Dcassandra.replace_address=${ip}"
 fi
 
+# add our seed provider to the JVM classpath
+export CLASSPATH=/rancher-cassandra.jar
+
+# TODO (llparse) deprecate this
+unset CASSANDRA_SEEDS
 if [ "$service_name" == "cassandra" ]; then
   # TODO gate for seed nodes (look @ scale?) or implement seed provider (even better)
   for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers); do
@@ -120,4 +122,5 @@ if [ "$1" = 'cassandra' ]; then
   done
 fi
 
-exec "$@"
+cassandra -f
+sleep 600
