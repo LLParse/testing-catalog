@@ -1,5 +1,5 @@
 # Characteristics
 
-* Places nodes on hosts with **cassandra=true** label defined
-* Many nodes may be scheduled on a single host
-* Data is ephemeral - only lives as long as the container does
+* If **cassandra=true** label exists on one or more hosts, nodes will only be scheduled to those hosts
+* Multiple nodes may be scheduled to a host
+* Data is ephemeral - destroying a container destroys the underlying data
