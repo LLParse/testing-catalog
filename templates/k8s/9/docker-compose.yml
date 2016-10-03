@@ -53,8 +53,8 @@ etcd:
         io.rancher.sidekicks: data
     environment:
         RANCHER_DEBUG: 'true'
-        BACKUP_PERIOD: 30s
-        BACKUP_RETENTION: 5m
+        BACKUP_PERIOD: '${BACKUP_PERIOD}'
+        BACKUP_RETENTION: '${BACKUP_RETENTION}'
     volumes:
     - etcd:/pdata
     - /var/etcd/backups:/data-backup

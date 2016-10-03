@@ -1,8 +1,21 @@
 .catalog:
   name: K8s
-  version: v1.2.4-rancher9
+  version: v1.2.4-rancher9.1
   description: Rancher Kubernetes service
   minimum_rancher_version: v1.1.1
+  questions:
+  - variable: BACKUP_PERIOD
+    label: Backup Creation Period
+    description: Create a backup after this amount of time passes
+    required: true
+    default: 15m0s
+    type: string
+  - variable: BACKUP_RETENTION
+    label: Backup Retention Period
+    description: Expire a backup after this amount of time passes
+    required: true
+    default: 24h
+    type: string
 
 kubernetes:
     metadata:
