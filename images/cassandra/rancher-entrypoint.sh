@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 META_URL=http://rancher-metadata.rancher.internal/2015-12-19
@@ -11,17 +11,15 @@ service_name=$(curl -s ${META_URL}/self/service/name)
 # Find a node with an open JMX port
 nodetool_remote() {
   target=
-  for service in seed cassandra; do
-    for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/${service}/containers); do
-      meta_index=$(echo $container | tr '=' '\n' | head -n1)
-      container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/${service}/containers/${meta_index}/primary_ip)
+  for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/${service_name}/containers); do
+    meta_index=$(echo $container | tr '=' '\n' | head -n1)
+    container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/${service_name}/containers/${meta_index}/primary_ip)
 
-      >/dev/tcp/${container_ip}/7199
-      if [ "$?" == "0" ]; then
-        target=$container_ip
-        break 2
-      fi
-    done
+    >/dev/tcp/${container_ip}/7199
+    if [ "$?" == "0" ]; then
+      target=$container_ip
+      break 2
+    fi
   done
   if [ "$target" != "" ]; then
     nodetool --host $target $@
@@ -49,19 +47,19 @@ fi
 export CLASSPATH=/rancher-cassandra.jar
 
 # TODO (llparse) deprecate this
-unset CASSANDRA_SEEDS
-if [ "$service_name" == "cassandra" ]; then
+#unset CASSANDRA_SEEDS
+#if [ "$service_name" == "cassandra" ]; then
   # TODO gate for seed nodes (look @ scale?) or implement seed provider (even better)
-  for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers); do
-    meta_index=$(echo $container | tr '=' '\n' | head -n1)
-    container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers/${meta_index}/primary_ip)
-    if [ "$CASSANDRA_SEEDS" == "" ]; then
-      export CASSANDRA_SEEDS=$container_ip
-    else
-      export CASSANDRA_SEEDS="${CASSANDRA_SEEDS},${container_ip}"
-    fi
-  done
-fi
+#  for container in $(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers); do
+#    meta_index=$(echo $container | tr '=' '\n' | head -n1)
+#    container_ip=$(curl -s ${META_URL}/stacks/${stack_name}/services/seed/containers/${meta_index}/primary_ip)
+#    if [ "$CASSANDRA_SEEDS" == "" ]; then
+#      export CASSANDRA_SEEDS=$container_ip
+#    else
+#      export CASSANDRA_SEEDS="${CASSANDRA_SEEDS},${container_ip}"
+#    fi
+#  done
+#fi
 
 # first arg is `-f` or `--some-option`
 if [ "${1:0:1}" = '-' ]; then
@@ -123,4 +121,3 @@ if [ "$1" = 'cassandra' ]; then
 fi
 
 cassandra -f
-sleep 600

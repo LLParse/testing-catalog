@@ -3,9 +3,17 @@
 ACCT=${ACCT:-llparse}
 VERSION=${VERSION:-v3.7}
 
-cd java
-./build
-cd -
+if [ -d ~/.m2 ]; then
+  echo Using host Maven repository
+  M2_DIR=~/.m2
+else
+  echo Using local Maven repository
+  M2_DIR="$PWD/java/.m2"
+  mkdir -p $M2_DIR
+fi
+
+docker run --rm -it -v "$M2_DIR":/root/.m2 -v "$PWD/java":/usr/src/app -w /usr/src/app maven:3.3.9-jdk-8 mvn clean install
+mv java/target/rancher-cassandra-*.jar rancher-cassandra.jar
 
 docker build -t $ACCT/cassandra:$VERSION .
 docker push $ACCT/cassandra:$VERSION

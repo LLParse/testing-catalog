@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class RancherSeedProvider implements SeedProvider {
 	private static final String RANCHER_METADATA = "http://rancher-metadata.rancher.internal/2015-12-19";
 	
 	private final List<InetAddress> defaultSeeds;
+	private final int numSeeds;
 	
 	/**
 	 * Create default seeds
@@ -35,10 +37,13 @@ public class RancherSeedProvider implements SeedProvider {
 	 */
 	public RancherSeedProvider(Map<String, String> params) {
 		defaultSeeds = createDefaultSeeds();
+		
+		String numSeedsVar = getEnvOrDefault("CASSANDRA_NUM_SEEDS", "3");
+		numSeeds = Integer.parseInt(numSeedsVar);
 	}
 	
 	public List<InetAddress> getSeeds() {
-		logger.info("Getting seeds from Rancher metadata");
+		logger.info(String.format("Getting %d seeds max from Rancher metadata", numSeeds));
 		
 		List<InetAddress> seeds = new ArrayList<InetAddress>();
 		try {
@@ -47,10 +52,18 @@ public class RancherSeedProvider implements SeedProvider {
 			cxn.addRequestProperty("Accept", "application/json");
 			
             ObjectMapper mapper = new ObjectMapper();
-            Container[] containers = mapper.readValue(cxn.getInputStream(), Container[].class);
+            Container[] containerArray = mapper.readValue(cxn.getInputStream(), Container[].class);
+
+        	// sort the containers for best-effort static seed selection
+            List<Container> containers = Arrays.asList(containerArray);
+            Collections.sort(containers);
+            
             for (Container container : containers) {
-            	logger.info("Found seed: " + container.primary_ip);
+            	logger.info(String.format("Found seed: %s (%d)", container.primary_ip, container.service_index));
             	seeds.add(InetAddress.getByName(container.primary_ip));
+            	if (seeds.size() >= numSeeds) {
+            		break;
+            	}
             }
 
 		} catch (Exception e) {
@@ -60,6 +73,20 @@ public class RancherSeedProvider implements SeedProvider {
 		
 		return Collections.unmodifiableList(seeds);
 	}
+	
+	/**
+	 * Code taken from https://github.com/kubernetes/kubernetes
+	 * @param var
+	 * @param def
+	 * @return
+	 */
+    private static String getEnvOrDefault(String var, String def) {
+        String val = System.getenv(var);
+        if (val == null) {
+            val = def;
+        }
+        return val;
+    }
 
     /**
      * Code taken from {@link SimpleSeedProvider}
@@ -107,13 +134,14 @@ public class RancherSeedProvider implements SeedProvider {
         return loader.loadConfig();
     }
     
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    static class Service {
-    	public List<Container> containers;
-    }
     
     @JsonIgnoreProperties(ignoreUnknown = true)
-    static class Container {
+    static class Container implements Comparable<Container> {
     	public String primary_ip;
+    	public Integer service_index;
+    	
+		public int compareTo(Container o) {
+			return service_index - o.service_index;
+		}
     }
 }
